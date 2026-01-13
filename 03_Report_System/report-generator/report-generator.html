@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google Analytics 4 (GA4) 측정 코드 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W7X130KM7E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-W7X130KM7E');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부동산 안전성 검증 보고서 생성기 - 보증지킴이</title>
+    <link rel="icon" type="image/png" href="../images/logo.png"> 
+    <link rel="apple-touch-icon" href="../images/logo.png">
+    <link rel="stylesheet" href="../report-generator/report-generator.css">
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1330722015430909');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1330722015430909&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>📊 부동산 안전성 검증 보고서 생성기</h1>
+            <p>간단한 정보 입력으로 전문적인 부동산 안전성 검증 보고서를 생성하세요</p>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <!-- 입력 폼 섹션 -->
+            <div class="form-section">
+                <h2>📝 보고서 정보 입력</h2>
+                
+                <!-- 섹션 네비게이션 -->
+                <div class="section-navigation">
+                    <button type="button" class="nav-btn active" onclick="showSection('customer')">👤 고객정보</button>
+                    <button type="button" class="nav-btn" onclick="showSection('property')">🏠 부동산정보</button>
+                    <button type="button" class="nav-btn" onclick="showSection('analysis')">📊 분석정보</button>
+                    <button type="button" class="nav-btn" onclick="showSection('insurance')">🛡️ 보험정보</button>
+                    <button type="button" class="nav-btn" onclick="showSection('scenario')">📋 시나리오</button>
+                </div>
+                
+                <form id="reportForm" class="form-grid">
+                    <!-- 고객 정보 섹션 -->
+                    <div class="section-content active" id="customer-section">
+                        <h3>👤 고객 정보</h3>
+                        <div class="form-group">
+                            <label for="customerName">고객 이름 *</label>
+                            <input type="text" id="customerName" placeholder="예: 김철수" value="김철수" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="requestedAnalysis">요청한 분석 유형</label>
+                            <div class="analysis-type-selector">
+                                <div class="selected-analysis" id="selectedAnalysis">집주인 재정상태 + 법적 위험성</div>
+                                <button type="button" class="select-button" onclick="openAnalysisSelector()">선택하기</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contractSituation">계약 상황</label>
+                            <div class="selector-container">
+                                <div class="selected-value" id="selectedContractSituation">계약은 했는데 아직 이사 전이에요</div>
+                                <button type="button" class="select-button" onclick="openContractSituationSelector()">선택하기</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additionalInfo">추가 정보</label>
+                            <textarea id="additionalInfo" placeholder="특별한 요청사항이나 추가 정보를 입력하세요">-</textarea>
+                        </div>
+                    </div>
+
+                    <!-- 부동산 정보 섹션 -->
+                    <div class="section-content" id="property-section">
+                        <h3>🏠 부동산 정보</h3>
+                        <div class="form-group">
+                            <label for="propertyAddress">부동산 주소 *</label>
+                            <input type="text" id="propertyAddress" placeholder="예: 서울시 강남구 역삼동 123-45" value="서울시 강남구 역삼동 123-45" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="depositType">보증금 유형 *</label>
+                            <div class="selector-container">
+                                <div class="selected-value" id="selectedDepositType">전세</div>
+                                <button type="button" class="select-button" onclick="openDepositTypeSelector()">선택하기</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="depositAmount">보증금 금액 *</label>
+                            <input type="text" id="depositAmount" placeholder="예: 3억원, 1억 5천만원" value="3억원" required>
+                            <div class="help-text">한글로 입력해주세요 (예: 3억원, 1억 5천만원)</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="monthlyRent">월세 금액</label>
+                            <input type="text" id="monthlyRent" placeholder="예: 50만원 (전세면 -)" value="-">
+                            <div class="help-text">월세/반전세인 경우에만 입력, 전세면 "-"</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contractPeriod">계약 기간</label>
+                            <div class="selector-container">
+                                <div class="selected-value" id="selectedContractPeriod">2년</div>
+                                <button type="button" class="select-button" onclick="openContractPeriodSelector()">선택하기</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 분석 정보 섹션 -->
+                    <div class="section-content" id="analysis-section">
+                        <h3>📊 분석 정보</h3>
+                        <div class="score-input-group">
+                            <div class="form-group">
+                                <label for="legalScore">법적 안전성 점수 *</label>
+                                <input type="number" id="legalScore" placeholder="0-100" value="90" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="financialScore">금융 안전성 점수 *</label>
+                                <input type="number" id="financialScore" placeholder="0-100" value="85" min="0" max="100" required>
+                            </div>
+                        </div>
+                        
+                        <div class="score-input-group">
+                            <div class="form-group">
+                                <label for="totalScore">종합 점수 (자동계산)</label>
+                                <input type="number" id="totalScore" placeholder="자동계산" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="scoreLabel">점수 등급 (자동계산)</label>
+                                <select id="scoreLabel" disabled>
+                                    <option value="우수">우수 (90-100)</option>
+                                    <option value="양호" selected>양호 (80-89)</option>
+                                    <option value="보통">보통 (70-79)</option>
+                                    <option value="주의">주의 (50-69)</option>
+                                    <option value="위험">위험 (0-49)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 보험 정보 섹션 -->
+                    <div class="section-content" id="insurance-section">
+                        <h3>🛡️ 보험 정보</h3>
+                        <div class="form-group">
+                            <label for="insuranceAvailable">보험 가입 가능 여부</label>
+                            <div class="selector-container">
+                                <div class="selected-value" id="selectedInsuranceAvailable">가입 가능</div>
+                                <button type="button" class="select-button" onclick="openInsuranceSelector()">선택하기</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="insurancePremium">월 보험료</label>
+                            <input type="text" id="insurancePremium" placeholder="예: 3만원" value="3만원">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="insuranceLimit">보장 한도</label>
+                            <input type="text" id="insuranceLimit" placeholder="예: 최대 3억원" value="최대 3억원">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recommendedInsurance">추천 보험사</label>
+                            <input type="text" id="recommendedInsurance" placeholder="예: DB손해보험, 현대해상" value="DB손해보험, 현대해상">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loanAvailable">전세대출 가능 여부</label>
+                            <div class="selector-container">
+                                <div class="selected-value" id="selectedLoanAvailable">대출 가능</div>
+                                <button type="button" class="select-button" onclick="openLoanSelector()">선택하기</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loanLimit">대출 한도</label>
+                            <input type="text" id="loanLimit" placeholder="예: 2.4억원" value="2.4억원">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recommendedBank">추천 은행</label>
+                            <input type="text" id="recommendedBank" placeholder="예: 국민은행, 신한은행" value="국민은행, 신한은행">
+                        </div>
+                    </div>
+
+                    <!-- 시나리오 선택 섹션 -->
+                    <div class="section-content" id="scenario-section">
+                        <h3>📋 시나리오 선택</h3>
+                        <p class="section-description">보고서에 포함할 시나리오를 선택하세요</p>
+                        
+                        <div class="scenario-checkboxes">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="scenarioAuction" checked>
+                                <label for="scenarioAuction">경매 상황</label>
+                                <span class="checkbox-desc">경매 발생 시 예상되는 상황과 손실 분석</span>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="scenarioFraud" checked onchange="toggleFraudDetails()">
+                                <label for="scenarioFraud">전세사기</label>
+                                <span class="checkbox-desc">이런 전세사기들이 있어요</span>
+                                <button type="button" class="detail-toggle-btn" onclick="toggleFraudDetails()" id="fraudDetailBtn">세부선택</button>
+                                
+                                <div class="fraud-details" id="fraudDetails" style="display: none;">
+                                    <div class="fraud-sub-checkboxes">
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudDoubleContract" checked>
+                                            <label for="fraudDoubleContract">이중계약 사기</label>
+                                            <span class="sub-desc">같은 집을 여러 명에게 계약</span>
+                                        </div>
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudFakeOwner" checked>
+                                            <label for="fraudFakeOwner">가짜 집주인 사기</label>
+                                            <span class="sub-desc">실제 집주인이 아닌 사람이 계약</span>
+                                        </div>
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudMortgage" checked>
+                                            <label for="fraudMortgage">저당권 설정 사기</label>
+                                            <span class="sub-desc">보증금보다 높은 저당권 설정</span>
+                                        </div>
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudAuction" checked>
+                                            <label for="fraudAuction">경매 예정 사기</label>
+                                            <span class="sub-desc">경매 예정인 집을 계약</span>
+                                        </div>
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudDocument" checked>
+                                            <label for="fraudDocument">서류 위조 사기</label>
+                                            <span class="sub-desc">등기부등본 등 서류 위조</span>
+                                        </div>
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudDeposit" checked>
+                                            <label for="fraudDeposit">보증금 횡령 사기</label>
+                                            <span class="sub-desc">보증금을 다른 용도로 사용</span>
+                                        </div>
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudEviction" checked>
+                                            <label for="fraudEviction">강제퇴거 사기</label>
+                                            <span class="sub-desc">계약 기간 중 강제로 퇴거 요구</span>
+                                        </div>
+                                        <div class="sub-checkbox-group">
+                                            <input type="checkbox" id="fraudRent" checked>
+                                            <label for="fraudRent">월세 요구 사기</label>
+                                            <span class="sub-desc">전세인데 월세를 요구</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="scenarioContact" checked>
+                                <label for="scenarioContact">집주인 연락 두절</label>
+                                <span class="checkbox-desc">갑자기 연락이 안 될 때</span>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="scenarioPrice" checked>
+                                <label for="scenarioPrice">저렴한 매물</label>
+                                <span class="checkbox-desc">너무 싸게 나온 집일 때</span>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="scenarioContract" checked>
+                                <label for="scenarioContract">계약서 이상 조항</label>
+                                <span class="checkbox-desc">이상한 조건이 있을 때</span>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="scenarioCredit" checked>
+                                <label for="scenarioCredit">집주인 신용도</label>
+                                <span class="checkbox-desc">집주인 재정상태가 불안할 때</span>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="scenarioTips" checked>
+                                <label for="scenarioTips">추가 팁</label>
+                                <span class="checkbox-desc">더 안전하게 하려면</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 빠른 템플릿 -->
+                    <div class="quick-templates">
+                        <h3>🚀 빠른 템플릿</h3>
+                        <div class="template-buttons">
+                            <button type="button" class="btn-template" onclick="loadTemplate('safe')">안전한 전세</button>
+                            <button type="button" class="btn-template" onclick="loadTemplate('monthly')">월세 계약</button>
+                            <button type="button" class="btn-template" onclick="loadTemplate('risky')">위험 부동산</button>
+                            <button type="button" class="btn-template" onclick="loadTemplate('excellent')">우수 부동산</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 액션 버튼들 -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" onclick="generateReport()">
+                        📊 보고서 생성
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                        🔄 초기화
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="openReport()">
+                        📄 보고서 보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- 미리보기 섹션 -->
+            <div class="preview-section">
+                <h2>👀 미리보기</h2>
+                <div class="preview-content">
+                    <div class="preview-placeholder" id="previewPlaceholder">
+                        📝 정보를 입력하고<br>
+                        "보고서 생성" 버튼을 클릭하면<br>
+                        미리보기가 표시됩니다
+                    </div>
+                    <div class="preview-data" id="previewData">
+                        <!-- 미리보기 데이터가 여기에 표시됩니다 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 분석 유형 선택 팝업 -->
+    <div class="analysis-selector-popup" id="analysisSelectorPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>분석 유형 선택</h3>
+                <button class="close-button" onclick="closeAnalysisSelector()">×</button>
+            </div>
+            <div class="analysis-options">
+                <div class="analysis-option" onclick="selectAnalysis('집주인 재정상태 + 법적 위험성')">
+                    <div class="option-icon">💰⚖️</div>
+                    <div class="option-text">
+                        <div class="option-title">집주인 재정상태 + 법적 위험성</div>
+                        <div class="option-desc">집주인의 재정상태와 법적 리스크를 종합 분석</div>
+                    </div>
+                </div>
+                <div class="analysis-option" onclick="selectAnalysis('부동산 시세 + 투자 가치')">
+                    <div class="option-icon">📈🏠</div>
+                    <div class="option-text">
+                        <div class="option-title">부동산 시세 + 투자 가치</div>
+                        <div class="option-desc">현재 시세와 향후 투자 가치를 분석</div>
+                    </div>
+                </div>
+                <div class="analysis-option" onclick="selectAnalysis('계약서 검토 + 권리분석')">
+                    <div class="option-icon">📋🔍</div>
+                    <div class="option-text">
+                        <div class="option-title">계약서 검토 + 권리분석</div>
+                        <div class="option-desc">계약서 내용과 임차인 권리를 상세 분석</div>
+                    </div>
+                </div>
+                <div class="analysis-option" onclick="selectAnalysis('전체 종합 분석')">
+                    <div class="option-icon">🎯📊</div>
+                    <div class="option-text">
+                        <div class="option-title">전체 종합 분석</div>
+                        <div class="option-desc">모든 항목을 포함한 종합적인 분석</div>
+                    </div>
+                </div>
+                <div class="analysis-option" onclick="selectAnalysis('긴급 위험성 검토')">
+                    <div class="option-icon">⚠️🚨</div>
+                    <div class="option-text">
+                        <div class="option-title">긴급 위험성 검토</div>
+                        <div class="option-desc">즉시 확인이 필요한 위험 요소들을 우선 분석</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 보증금 유형 선택 팝업 -->
+    <div class="selector-popup" id="depositTypeSelectorPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>보증금 유형 선택</h3>
+                <button class="close-button" onclick="closeDepositTypeSelector()">×</button>
+            </div>
+            <div class="selector-options">
+                <div class="selector-option" onclick="selectDepositType('전세')">
+                    <div class="option-icon">🏠</div>
+                    <div class="option-text">
+                        <div class="option-title">전세</div>
+                        <div class="option-desc">보증금만 지불하고 월세 없음</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectDepositType('월세')">
+                    <div class="option-icon">💰</div>
+                    <div class="option-text">
+                        <div class="option-title">월세</div>
+                        <div class="option-desc">보증금 + 매월 월세 지불</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectDepositType('반전세')">
+                    <div class="option-icon">🔄</div>
+                    <div class="option-text">
+                        <div class="option-title">반전세</div>
+                        <div class="option-desc">보증금의 일부만 지불하고 월세 지불</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 계약 기간 선택 팝업 -->
+    <div class="selector-popup" id="contractPeriodSelectorPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>계약 기간 선택</h3>
+                <button class="close-button" onclick="closeContractPeriodSelector()">×</button>
+            </div>
+            <div class="selector-options">
+                <div class="selector-option" onclick="selectContractPeriod('6개월')">
+                    <div class="option-icon">📅</div>
+                    <div class="option-text">
+                        <div class="option-title">6개월</div>
+                        <div class="option-desc">단기 계약</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectContractPeriod('1년')">
+                    <div class="option-icon">📆</div>
+                    <div class="option-text">
+                        <div class="option-title">1년</div>
+                        <div class="option-desc">일반적인 계약 기간</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectContractPeriod('2년')">
+                    <div class="option-icon">🗓️</div>
+                    <div class="option-text">
+                        <div class="option-title">2년</div>
+                        <div class="option-desc">장기 계약 (권장)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 보험 가입 가능 여부 선택 팝업 -->
+    <div class="selector-popup" id="insuranceSelectorPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>보험 가입 가능 여부</h3>
+                <button class="close-button" onclick="closeInsuranceSelector()">×</button>
+            </div>
+            <div class="selector-options">
+                <div class="selector-option" onclick="selectInsurance('가입 가능')">
+                    <div class="option-icon">✅</div>
+                    <div class="option-text">
+                        <div class="option-title">가입 가능</div>
+                        <div class="option-desc">전세보증보험 가입 가능</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectInsurance('가입 불가')">
+                    <div class="option-icon">❌</div>
+                    <div class="option-text">
+                        <div class="option-title">가입 불가</div>
+                        <div class="option-desc">보험 가입 조건 미충족</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectInsurance('조건부 가입')">
+                    <div class="option-icon">⚠️</div>
+                    <div class="option-text">
+                        <div class="option-title">조건부 가입</div>
+                        <div class="option-desc">특정 조건 하에 가입 가능</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 전세대출 가능 여부 선택 팝업 -->
+    <div class="selector-popup" id="loanSelectorPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>전세대출 가능 여부</h3>
+                <button class="close-button" onclick="closeLoanSelector()">×</button>
+            </div>
+            <div class="selector-options">
+                <div class="selector-option" onclick="selectLoan('대출 가능')">
+                    <div class="option-icon">🏦</div>
+                    <div class="option-text">
+                        <div class="option-title">대출 가능</div>
+                        <div class="option-desc">전세대출 신청 가능</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectLoan('대출 불가')">
+                    <div class="option-icon">🚫</div>
+                    <div class="option-text">
+                        <div class="option-title">대출 불가</div>
+                        <div class="option-desc">대출 조건 미충족</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectLoan('조건부 대출')">
+                    <div class="option-icon">📋</div>
+                    <div class="option-text">
+                        <div class="option-title">조건부 대출</div>
+                        <div class="option-desc">특정 조건 하에 대출 가능</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 계약 상황 선택 팝업 -->
+    <div class="selector-popup" id="contractSituationSelectorPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>계약 상황 선택</h3>
+                <button class="close-button" onclick="closeContractSituationSelector()">×</button>
+            </div>
+            <div class="selector-options">
+                <div class="selector-option" onclick="selectContractSituation('계약은 했는데 아직 이사 전이에요')">
+                    <div class="option-icon">📋</div>
+                    <div class="option-text">
+                        <div class="option-title">계약은 했는데 아직 이사 전이에요</div>
+                        <div class="option-desc">계약 체결 후 이사 준비 중</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectContractSituation('계약하고 싶은 집이 있어요')">
+                    <div class="option-icon">🔍</div>
+                    <div class="option-text">
+                        <div class="option-title">계약하고 싶은 집이 있어요</div>
+                        <div class="option-desc">계약 전 분석 요청</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectContractSituation('현재 거주 중이에요')">
+                    <div class="option-icon">🏠</div>
+                    <div class="option-text">
+                        <div class="option-title">현재 거주 중이에요</div>
+                        <div class="option-desc">이미 거주 중인 부동산 분석</div>
+                    </div>
+                </div>
+                <div class="selector-option" onclick="selectContractSituation('둘러보기만 했어요')">
+                    <div class="option-icon">👀</div>
+                    <div class="option-text">
+                        <div class="option-title">둘러보기만 했어요</div>
+                        <div class="option-desc">부동산 확인 후 분석 요청</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 팝업 클릭율 및 광고비 대비 수익률 측정을 위한 추적 코드 -->
+    <script>
+        /**
+         * ========================================
+         * 팝업 클릭율 및 광고비 대비 수익률 측정 시스템
+         * ========================================
+         */
+        
+        // 추적 데이터 저장소
+        const trackingData = {
+            popupClicks: {},
+            adRevenue: {},
+            userSessions: [],
+            conversionEvents: []
+        };
+
+        // 팝업 클릭 추적 함수
+        function trackPopupClick(popupId, popupType, action) {
+            const timestamp = new Date().toISOString();
+            const sessionId = getSessionId();
+            
+            const clickData = {
+                sessionId: sessionId,
+                popupId: popupId,
+                popupType: popupType,
+                action: action, // 'open', 'close', 'interact'
+                timestamp: timestamp,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer,
+                url: window.location.href
+            };
+
+            // 로컬 저장소에 저장
+            if (!trackingData.popupClicks[popupId]) {
+                trackingData.popupClicks[popupId] = [];
+            }
+            trackingData.popupClicks[popupId].push(clickData);
+
+            // 서버로 전송 (실제 구현 시)
+            sendTrackingData('popup_click', clickData);
+            
+            console.log('팝업 클릭 추적:', clickData);
+        }
+
+        // 전환 이벤트 추적 (보고서 생성, 다운로드 등)
+        function trackConversionEvent(eventType, eventValue, metadata = {}) {
+            const timestamp = new Date().toISOString();
+            const sessionId = getSessionId();
+            
+            const conversionData = {
+                sessionId: sessionId,
+                eventType: eventType, // 'report_generated', 'report_downloaded', 'form_submitted'
+                eventValue: eventValue,
+                metadata: metadata,
+                timestamp: timestamp,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer,
+                url: window.location.href
+            };
+
+            trackingData.conversionEvents.push(conversionData);
+            sendTrackingData('conversion', conversionData);
+            
+            console.log('전환 이벤트 추적:', conversionData);
+        }
+
+        // 세션 ID 생성
+        function getSessionId() {
+            let sessionId = sessionStorage.getItem('tracking_session_id');
+            if (!sessionId) {
+                sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('tracking_session_id', sessionId);
+            }
+            return sessionId;
+        }
+
+        // 추적 데이터를 서버로 전송
+        function sendTrackingData(eventType, data) {
+            // 현재는 로컬 스토리지에 저장
+            const existingData = JSON.parse(localStorage.getItem('tracking_data') || '{}');
+            if (!existingData[eventType]) {
+                existingData[eventType] = [];
+            }
+            existingData[eventType].push(data);
+            localStorage.setItem('tracking_data', JSON.stringify(existingData));
+        }
+
+        // 개발자용 추적 데이터 확인 함수 (콘솔에서 사용)
+        window.trackingUtils = {
+            getData: () => trackingData,
+            trackPopupClick: trackPopupClick,
+            trackConversion: trackConversionEvent
+        };
+    </script>
+
+    <script>
+        /**
+         * ========================================
+         * 보고서 생성기 JavaScript
+         * ========================================
+         */
+
+        // 분석 유형 선택 팝업 관련 함수들
+        function openAnalysisSelector() {
+            document.getElementById('analysisSelectorPopup').style.display = 'flex';
+            trackPopupClick('analysis_selector', 'popup_selector', 'open');
+        }
+
+        function closeAnalysisSelector() {
+            document.getElementById('analysisSelectorPopup').style.display = 'none';
+            trackPopupClick('analysis_selector', 'popup_selector', 'close');
+        }
+
+        function selectAnalysis(analysisType) {
+            document.getElementById('selectedAnalysis').textContent = analysisType;
+            trackPopupClick('analysis_selector', 'popup_selector', 'interact');
+            closeAnalysisSelector();
+        }
+
+        // 팝업 외부 클릭 시 닫기
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('analysisSelectorPopup');
+            if (event.target === popup) {
+                closeAnalysisSelector();
+            }
+        });
+
+        // 보증금 유형 선택 관련 함수들
+        function openDepositTypeSelector() {
+            document.getElementById('depositTypeSelectorPopup').style.display = 'flex';
+        }
+
+        function closeDepositTypeSelector() {
+            document.getElementById('depositTypeSelectorPopup').style.display = 'none';
+        }
+
+        function selectDepositType(depositType) {
+            document.getElementById('selectedDepositType').textContent = depositType;
+            closeDepositTypeSelector();
+        }
+
+        // 계약 기간 선택 관련 함수들
+        function openContractPeriodSelector() {
+            document.getElementById('contractPeriodSelectorPopup').style.display = 'flex';
+        }
+
+        function closeContractPeriodSelector() {
+            document.getElementById('contractPeriodSelectorPopup').style.display = 'none';
+        }
+
+        function selectContractPeriod(contractPeriod) {
+            document.getElementById('selectedContractPeriod').textContent = contractPeriod;
+            closeContractPeriodSelector();
+        }
+
+        // 보험 가입 가능 여부 선택 관련 함수들
+        function openInsuranceSelector() {
+            document.getElementById('insuranceSelectorPopup').style.display = 'flex';
+        }
+
+        function closeInsuranceSelector() {
+            document.getElementById('insuranceSelectorPopup').style.display = 'none';
+        }
+
+        function selectInsurance(insuranceStatus) {
+            document.getElementById('selectedInsuranceAvailable').textContent = insuranceStatus;
+            closeInsuranceSelector();
+        }
+
+        // 전세대출 가능 여부 선택 관련 함수들
+        function openLoanSelector() {
+            document.getElementById('loanSelectorPopup').style.display = 'flex';
+        }
+
+        function closeLoanSelector() {
+            document.getElementById('loanSelectorPopup').style.display = 'none';
+        }
+
+        function selectLoan(loanStatus) {
+            document.getElementById('selectedLoanAvailable').textContent = loanStatus;
+            closeLoanSelector();
+        }
+
+        // 계약 상황 선택 관련 함수들
+        function openContractSituationSelector() {
+            document.getElementById('contractSituationSelectorPopup').style.display = 'flex';
+        }
+
+        function closeContractSituationSelector() {
+            document.getElementById('contractSituationSelectorPopup').style.display = 'none';
+        }
+
+        function selectContractSituation(contractSituation) {
+            document.getElementById('selectedContractSituation').textContent = contractSituation;
+            closeContractSituationSelector();
+        }
+
+        // 모든 팝업 외부 클릭 시 닫기
+        document.addEventListener('click', function(event) {
+            const popups = [
+                'analysisSelectorPopup',
+                'depositTypeSelectorPopup', 
+                'contractPeriodSelectorPopup',
+                'insuranceSelectorPopup',
+                'loanSelectorPopup',
+                'contractSituationSelectorPopup'
+            ];
+            
+            popups.forEach(popupId => {
+                const popup = document.getElementById(popupId);
+                if (event.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        });
+
+        // 전세사기 세부 항목 토글 함수
+        function toggleFraudDetails() {
+            const fraudDetails = document.getElementById('fraudDetails');
+            const fraudDetailBtn = document.getElementById('fraudDetailBtn');
+            const isVisible = fraudDetails.style.display !== 'none';
+            
+            if (isVisible) {
+                fraudDetails.style.display = 'none';
+                fraudDetailBtn.textContent = '세부선택';
+            } else {
+                fraudDetails.style.display = 'block';
+                fraudDetailBtn.textContent = '접기';
+            }
+        }
+
+        // 법적 안전성과 금융 안전성 점수 입력 시 자동으로 종합 점수와 등급 계산
+        function calculateTotalScore() {
+            const legalScore = parseInt(document.getElementById('legalScore').value) || 0;
+            const financialScore = parseInt(document.getElementById('financialScore').value) || 0;
+            
+            // 평균 점수 계산 (소수점 첫째자리까지 반올림)
+            const averageScore = Math.round(((legalScore + financialScore) / 2) * 10) / 10;
+            
+            // 종합 점수 업데이트
+            document.getElementById('totalScore').value = averageScore;
+            
+            // 점수 등급 자동 설정
+            const scoreLabel = document.getElementById('scoreLabel');
+            if (averageScore >= 90) scoreLabel.value = '우수';
+            else if (averageScore >= 80) scoreLabel.value = '양호';
+            else if (averageScore >= 70) scoreLabel.value = '보통';
+            else if (averageScore >= 50) scoreLabel.value = '주의';
+            else if (averageScore >= 0) scoreLabel.value = '위험';
+            
+            updatePreview();
+        }
+
+        // 법적 안전성과 금융 안전성 점수 입력 이벤트
+        document.getElementById('legalScore').addEventListener('input', calculateTotalScore);
+        document.getElementById('financialScore').addEventListener('input', calculateTotalScore);
+
+        /**
+         * 섹션 전환 함수
+         */
+        function showSection(sectionId) {
+            // 모든 섹션 숨기기
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 모든 네비게이션 버튼 비활성화
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 선택된 섹션 표시
+            const targetSection = document.getElementById(sectionId + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // 선택된 버튼 활성화
+            const targetButton = event.target;
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+        }
+
+        // 모든 입력 필드에 실시간 미리보기 업데이트 이벤트 추가
+        document.querySelectorAll('#reportForm input, #reportForm select, #reportForm textarea').forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        /**
+         * 미리보기 업데이트
+         */
+        function updatePreview() {
+            const formData = getFormData();
+            const previewPlaceholder = document.getElementById('previewPlaceholder');
+            const previewData = document.getElementById('previewData');
+            
+            if (formData.customerName && formData.propertyAddress && formData.depositAmount) {
+                previewPlaceholder.style.display = 'none';
+                previewData.style.display = 'block';
+                
+                previewData.innerHTML = `
+                    <div class="preview-item">
+                        <span class="preview-label">고객명</span>
+                        <span class="preview-value">${formData.customerName}</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">부동산 주소</span>
+                        <span class="preview-value">${formData.propertyAddress}</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">보증금 유형</span>
+                        <span class="preview-value">${formData.depositType}</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">보증금 금액</span>
+                        <span class="preview-value">${formData.depositAmount}</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">월세 금액</span>
+                        <span class="preview-value">${formData.monthlyRent}</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">계약 기간</span>
+                        <span class="preview-value">${formData.contractPeriod}</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">종합 점수</span>
+                        <span class="preview-value">${formData.totalScore}점 (${formData.scoreLabel})</span>
+                    </div>
+                `;
+            } else {
+                previewPlaceholder.style.display = 'block';
+                previewData.style.display = 'none';
+            }
+        }
+
+        /**
+         * 폼 데이터 수집
+         */
+        function getFormData() {
+            // 전세사기 세부 항목들 (fraudDetailsChecked 배열로 통합)
+            const fraudDetailsChecked = [];
+            if (document.getElementById('fraudDoubleContract').checked) fraudDetailsChecked.push('doubleContract');
+            if (document.getElementById('fraudFakeOwner').checked) fraudDetailsChecked.push('fakeLandlord');
+            if (document.getElementById('fraudMortgage').checked) fraudDetailsChecked.push('depositFraud'); // 저당권 > 보증금 사기 유형으로 간주
+            if (document.getElementById('fraudAuction').checked) fraudDetailsChecked.push('kkangtong'); // 경매 예정 > 깡통전세 유형으로 간주
+            if (document.getElementById('fraudDocument').checked) fraudDetailsChecked.push('fakeDocument');
+            if (document.getElementById('fraudDeposit').checked) fraudDetailsChecked.push('depositFraud');
+            if (document.getElementById('fraudEviction').checked) fraudDetailsChecked.push('evictionFraud');
+            if (document.getElementById('fraudRent').checked) fraudDetailsChecked.push('doubleContract'); // 월세 요구 > 이중계약/권리분쟁 유형으로 간주
+
+            return {
+                customerName: document.getElementById('customerName').value,
+                propertyAddress: document.getElementById('propertyAddress').value,
+                depositType: document.getElementById('selectedDepositType').textContent,
+                depositAmount: document.getElementById('depositAmount').value,
+                monthlyRent: document.getElementById('monthlyRent').value,
+                contractPeriod: document.getElementById('selectedContractPeriod').textContent,
+                legalScore: parseInt(document.getElementById('legalScore').value),
+                financialScore: parseInt(document.getElementById('financialScore').value),
+                totalScore: parseFloat(document.getElementById('totalScore').value),
+                scoreLabel: document.getElementById('scoreLabel').value,
+                requestedAnalysis: document.getElementById('selectedAnalysis').textContent,
+                contractSituation: document.getElementById('selectedContractSituation').textContent,
+                additionalInfo: document.getElementById('additionalInfo').value,
+                insuranceAvailable: document.getElementById('selectedInsuranceAvailable').textContent,
+                insurancePremium: document.getElementById('insurancePremium').value,
+                insuranceLimit: document.getElementById('insuranceLimit').value,
+                recommendedInsurance: document.getElementById('recommendedInsurance').value,
+                loanAvailable: document.getElementById('selectedLoanAvailable').textContent,
+                loanLimit: document.getElementById('loanLimit').value,
+                recommendedBank: document.getElementById('recommendedBank').value,
+                scenarioAuction: document.getElementById('scenarioAuction').checked,
+                scenarioFraud: document.getElementById('scenarioFraud').checked,
+                scenarioContact: document.getElementById('scenarioContact').checked,
+                scenarioPrice: document.getElementById('scenarioPrice').checked,
+                scenarioContract: document.getElementById('scenarioContract').checked,
+                scenarioCredit: document.getElementById('scenarioCredit').checked,
+                scenarioTips: document.getElementById('scenarioTips').checked,
+                // 💡 추가: 체크된 전세사기 세부 유형 리스트를 추가
+                fraudDetailsChecked: fraudDetailsChecked
+            };
+        }
+
+        /**
+         * 보고서 생성
+         */
+        function generateReport() {
+            try {
+                const formData = getFormData();
+                
+                // 필수 필드 검증
+                if (!formData.customerName || !formData.propertyAddress || !formData.depositAmount) {
+                    showNotification('❌ 필수 정보를 모두 입력해주세요.', 'error');
+                    return;
+                }
+                
+                // 보고서 생성 추적
+                trackConversionEvent('report_generated', 'report_generator', {
+                    customerName: formData.customerName,
+                    propertyAddress: formData.propertyAddress,
+                    depositAmount: formData.depositAmount,
+                    totalScore: formData.totalScore
+                });
+
+                // 점수에 따른 자동 설명 생성
+                formData.scoreDescription = generateScoreDescription(formData.totalScore, formData.scoreLabel);
+
+                // localStorage에 데이터 저장
+                localStorage.setItem('reportData', JSON.stringify(formData));
+                
+                // 새로운 HTML 파일 생성
+                generateNewHTMLFile(formData);
+                
+                showNotification('✅ 보고서가 성공적으로 생성되었습니다!', 'success');
+                
+                // 1초 후 보고서 페이지로 이동
+                setTimeout(() => {
+                    window.open('report-template.html', '_blank');
+                }, 1000);
+
+            } catch (error) {
+                console.error('보고서 생성 중 오류:', error);
+                showNotification('❌ 보고서 생성 중 오류가 발생했습니다.', 'error');
+            }
+        }
+
+        /**
+         * 새로운 HTML 파일 생성
+         */
+        function generateNewHTMLFile(formData) {
+            try {
+                // 파일명 생성 (고객명_날짜시간)
+                const now = new Date();
+                const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+                const fileName = `${formData.customerName}_${timestamp}.html`;
+                
+                // HTML 템플릿 생성
+                const htmlContent = generateHTMLTemplate(formData);
+                
+                // Blob 생성
+                const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+                
+                // File System Access API를 사용하여 특정 폴더에 저장 시도
+                if ('showSaveFilePicker' in window) {
+                    // 최신 브라우저에서 지원하는 File System Access API 사용
+                    window.showSaveFilePicker({
+                        suggestedName: fileName,
+                        types: [{
+                            description: 'HTML 파일',
+                            accept: { 'text/html': ['.html'] }
+                        }]
+                    }).then(fileHandle => {
+                        return fileHandle.createWritable();
+                    }).then(writable => {
+                        return writable.write(blob);
+                    }).then(() => {
+                        console.log(`✅ 파일이 성공적으로 저장되었습니다: ${fileName}`);
+                        
+                        // 보고서 다운로드 추적
+                        trackConversionEvent('report_downloaded', fileName, {
+                            customerName: formData.customerName,
+                            propertyAddress: formData.propertyAddress,
+                            depositAmount: formData.depositAmount,
+                            totalScore: formData.totalScore
+                        });
+                    }).catch(error => {
+                        console.warn('File System Access API 실패, 기본 다운로드로 대체:', error);
+                        fallbackDownload(blob, fileName, formData);
+                    });
+                } else {
+                    // 구형 브라우저에서는 기본 다운로드 사용
+                    fallbackDownload(blob, fileName, formData);
+                }
+                
+            } catch (error) {
+                console.error('❌ HTML 파일 생성 중 오류:', error);
+                throw error;
+            }
+        }
+        
+        /**
+         * 기본 다운로드 방식 (fallback)
+         */
+        function fallbackDownload(blob, fileName, formData) {
+            const url = URL.createObjectURL(blob);
+            
+            // 다운로드 링크 생성
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = fileName;
+            downloadLink.style.display = 'none';
+            
+            // 다운로드 실행
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // URL 해제
+            URL.revokeObjectURL(url);
+            
+            // 보고서 다운로드 추적
+            trackConversionEvent('report_downloaded', fileName, {
+                customerName: formData.customerName,
+                propertyAddress: formData.propertyAddress,
+                depositAmount: formData.depositAmount,
+                totalScore: formData.totalScore
+            });
+            
+            console.log(`✅ 새로운 HTML 파일 생성 완료: ${fileName}`);
+        }
+
+        /**
+         * HTML 템플릿 생성
+         */
+        function generateHTMLTemplate(formData) {
+            const htmlTemplate = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부동산 안전성 검증 보고서 - ${formData.customerName}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .report-container {
+            max-width: 402px;
+            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 헤더 */
+        .report-header {
+            background: #f8fafc;
+            color: #374151;
+            padding: 0.5rem 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0;
+            color: #1e40af;
+            letter-spacing: -0.02em;
+        }
+
+        .report-meta {
+            background: #ffffff;
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .property-info-table {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            padding: 0;
+            max-width: 100%;
+            box-sizing: border-box;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            table-layout: auto;
+            max-width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 0.5rem;
+            text-align: center;
+            letter-spacing: -0.01em;
+            width: 100%;
+            border-radius: 12px 12px 0 0;
+            display: block;
+            margin: 0;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        .info-label {
+            background: #f8fafc;
+            color: #6b7280;
+            font-weight: 600;
+            padding: 0.5rem 0.3rem;
+            font-size: 0.75rem;
+            letter-spacing: -0.01em;
+            width: 25%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .info-value {
+            background: #ffffff;
+            color: #374151;
+            font-weight: 600;
+            padding: 0.5rem 0.3rem;
+            font-size: 0.75rem;
+            letter-spacing: -0.01em;
+            text-align: center;
+            vertical-align: middle;
+            width: 25%;
+            word-wrap: break-word;
+        }
+
+        /* 1열 행 스타일 (첫 번째와 마지막 행) */
+        tr:first-child .info-value,
+        tr:last-child .info-value {
+            width: 100%;
+            text-align: left;
+            padding-left: 1rem;
+        }
+
+        /* colspan="3"가 적용된 셀 스타일 */
+        .info-value[colspan="3"] {
+            width: 100%;
+            text-align: left;
+            padding-left: 1rem;
+            box-sizing: border-box;
+        }
+
+        /* 4열 행 스타일 (보증금 유형 + 상세유형, 보증금 + 월세) */
+        tr:nth-child(2) td,
+        tr:nth-child(3) td {
+            width: 25%;
+            max-width: 25%;
+            min-width: 25%;
+            box-sizing: border-box;
+            padding: 0.5rem 0.75rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* 4열 행에서 라벨과 값의 비율 조정 - 균일한 크기로 변경 */
+        tr:nth-child(2) .info-label,
+        tr:nth-child(3) .info-label {
+            width: 25%;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 0.5rem 0.3rem;
+            max-width: 100%;
+        }
+
+        tr:nth-child(2) .info-value,
+        tr:nth-child(3) .info-value {
+            width: 25%;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 0.5rem 0.3rem;
+            max-width: 100%;
+        }
+
+        /* 호버 효과 */
+        tr:hover .info-label {
+            background: #f1f5f9;
+        }
+
+        tr:hover .info-value {
+            background: #f8fafc;
+        }
+
+        /* 고객 개인화 정보 섹션 */
+        .customer-info-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .customer-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .customer-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .customer-subtitle {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .customer-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 600;
+            min-width: 100px;
+            position: relative;
+        }
+
+        .detail-label::after {
+            content: '';
+            position: absolute;
+            right: -0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 60%;
+            background: #e5e7eb;
+        }
+
+        .detail-value {
+            font-size: 0.85rem;
+            color: #374151;
+            font-weight: 600;
+            text-align: right;
+            flex: 1;
+            margin-left: 1rem;
+        }
+
+        /* 메인 콘텐츠 */
+        .report-content {
+            padding: 1rem;
+            flex: 1;
+        }
+
+        /* 푸터 */
+        .report-footer {
+            background: #f8fafc;
+            color: #374151;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-top: 2px solid #e5e7eb;
+            margin-top: auto;
+            margin-bottom: 4rem;
+        }
+
+        .footer-logo {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: #1f2937;
+        }
+
+        .footer-info {
+            font-size: 0.75rem;
+            color: #6b7280;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* 인쇄 스타일 */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .report-container {
+                box-shadow: none;
+                max-width: none;
+                border: none;
+            }
+            
+            .report-header {
+                background: #2d3748;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <!-- 헤더 -->
+        <div class="report-header">
+            <div class="header-content">
+                <div class="company-name">보증지킴이</div>
+            </div>
+        </div>
+
+        <!-- 보고서 메타 정보 -->
+        <div class="report-meta">
+            <div class="property-info-table">
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th class="table-header">부동산 안전성 검증 보고서</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="info-label">고객명</td>
+                            <td class="info-value" colspan="3">${formData.customerName || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">거래유형</td>
+                            <td class="info-value">${formData.depositType || '-'}</td>
+                            <td class="info-label">상세유형</td>
+                            <td class="info-value">${formData.detailType || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">보증금</td>
+                            <td class="info-value">${formData.depositAmount || '-'}</td>
+                            <td class="info-label">월세</td>
+                            <td class="info-value">${formData.monthlyRent || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">주소</td>
+                            <td class="info-value" colspan="3">${formData.propertyAddress || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">상황</td>
+                            <td class="info-value" colspan="3">${formData.additionalInfo || '-'}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 고객 개인화 정보 -->
+        <div class="customer-info-section">
+            <div class="customer-header">
+                <h2 class="customer-title">📊 안전성 검증 결과</h2>
+                <p class="customer-subtitle">종합 점수: ${formData.totalScore || 0}점 (${formData.scoreLabel || '평가중'})</p>
+            </div>
+            
+            <div class="customer-details">
+                <div class="detail-item">
+                    <span class="detail-label">요청 분석</span>
+                    <span class="detail-value">${formData.requestedAnalysis || '-'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">계약 기간</span>
+                    <span class="detail-value">${formData.contractPeriod || '-'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">법적 안전성</span>
+                    <span class="detail-value">${formData.legalScore || 0}점</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">금융 안전성</span>
+                    <span class="detail-value">${formData.financialScore || 0}점</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="report-content">
+            <div class="detail-item">
+                <span class="detail-label">평가 설명</span>
+                <span class="detail-value">${formData.scoreDescription || '평가 중입니다.'}</span>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="report-footer">
+            <div class="footer-logo">보증지킴이</div>
+            <p class="footer-info">
+                이 보고서는 보증지킴이에서 생성되었습니다.<br>
+                생성일: ${new Date().toLocaleDateString('ko-KR')}<br>
+                © 2024 보증지킴이. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>`;
+            
+            return htmlTemplate;
+        }
+
+        /**
+         * 점수에 따른 설명 생성
+         */
+        function generateScoreDescription(score, label) {
+            const descriptions = {
+                '우수': '매우 안전한 거래가 가능한 우수한 부동산입니다. 신뢰할 수 있는 거래입니다.',
+                '양호': '전반적으로 안전한 거래가 가능한 수준입니다. 일부 주의사항이 있으나 큰 문제는 없습니다.',
+                '보통': '일반적인 수준의 안전성을 보이는 부동산입니다. 신중한 검토가 필요합니다.',
+                '주의': '여러 주의사항이 발견되어 신중한 검토가 필요합니다. 추가 확인을 권장합니다.',
+                '위험': '높은 위험 요소가 발견되었습니다. 전문가 상담을 강력히 권장합니다.'
+            };
+            return descriptions[label] || '분석 결과에 대한 상세한 설명입니다.';
+        }
+
+        /**
+         * 폼 초기화
+         */
+        function resetForm() {
+            document.getElementById('customerName').value = '김철수';
+            document.getElementById('propertyAddress').value = '서울시 강남구 역삼동 123-45';
+            document.getElementById('depositType').value = '전세';
+            document.getElementById('depositAmount').value = '3억원';
+            document.getElementById('monthlyRent').value = '-';
+            document.getElementById('contractPeriod').value = '2년';
+            document.getElementById('legalScore').value = '90';
+            document.getElementById('financialScore').value = '85';
+            document.getElementById('totalScore').value = '87.5';
+            document.getElementById('scoreLabel').value = '양호';
+            document.getElementById('selectedAnalysis').textContent = '집주인 재정상태 + 법적 위험성';
+            document.getElementById('selectedContractSituation').textContent = '계약은 했는데 아직 이사 전이에요';
+            document.getElementById('additionalInfo').value = '-';
+            document.getElementById('insuranceAvailable').value = '가입 가능';
+            document.getElementById('insurancePremium').value = '3만원';
+            document.getElementById('insuranceLimit').value = '최대 3억원';
+            document.getElementById('recommendedInsurance').value = 'DB손해보험, 현대해상';
+            document.getElementById('loanAvailable').value = '대출 가능';
+            document.getElementById('loanLimit').value = '2.4억원';
+            document.getElementById('recommendedBank').value = '국민은행, 신한은행';
+            
+            // 시나리오 체크박스 초기화 (모두 체크)
+            document.getElementById('scenarioAuction').checked = true;
+            document.getElementById('scenarioFraud').checked = true;
+            document.getElementById('scenarioContact').checked = true;
+            document.getElementById('scenarioPrice').checked = true;
+            document.getElementById('scenarioContract').checked = true;
+            document.getElementById('scenarioCredit').checked = true;
+            document.getElementById('scenarioTips').checked = true;
+            
+            calculateTotalScore();
+            updatePreview();
+            showNotification('🔄 폼이 초기화되었습니다.', 'info');
+        }
+
+        /**
+         * 보고서 보기 (새 탭에서 열기)
+         */
+        function openReport() {
+            window.open('report-template.html', '_blank');
+        }
+
+        /**
+         * 빠른 템플릿 로드
+         */
+        function loadTemplate(type) {
+            const templates = {
+                'safe': {
+                    customerName: '김철수',
+                    propertyAddress: '서울시 강남구 역삼동 123-45',
+                    depositType: '전세',
+                    depositAmount: '3억원',
+                    monthlyRent: '-',
+                    contractPeriod: '2년',
+                    legalScore: '90',
+                    financialScore: '85',
+                    requestedAnalysis: '집주인 재정상태 + 법적 위험성',
+                    contractSituation: '계약은 했는데 아직 이사 전이에요',
+                    additionalInfo: '-',
+                    insuranceAvailable: '가입 가능',
+                    insurancePremium: '3만원',
+                    insuranceLimit: '최대 3억원',
+                    recommendedInsurance: 'DB손해보험, 현대해상',
+                    loanAvailable: '대출 가능',
+                    loanLimit: '2.4억원',
+                    recommendedBank: '국민은행, 신한은행',
+                    scenarioAuction: true,
+                    scenarioFraud: true,
+                    scenarioContact: true,
+                    scenarioPrice: true,
+                    scenarioContract: true,
+                    scenarioCredit: true,
+                    scenarioTips: true
+                },
+                'monthly': {
+                    customerName: '이영희',
+                    propertyAddress: '서울시 서초구 서초동 456-78',
+                    depositType: '월세',
+                    depositAmount: '1억원',
+                    monthlyRent: '80만원',
+                    contractPeriod: '1년',
+                    legalScore: '75',
+                    financialScore: '80',
+                    requestedAnalysis: '집주인 신용도 + 건물 안전성',
+                    contractSituation: '계약하고 싶은 집이 있어요',
+                    additionalInfo: '월세 계약입니다',
+                    insuranceAvailable: '가입 가능',
+                    insurancePremium: '2만원',
+                    insuranceLimit: '최대 1억원',
+                    recommendedInsurance: 'DB손해보험, 현대해상',
+                    loanAvailable: '대출 가능',
+                    loanLimit: '8천만원',
+                    recommendedBank: '국민은행, 신한은행',
+                    scenarioAuction: true,
+                    scenarioFraud: true,
+                    scenarioContact: true,
+                    scenarioPrice: true,
+                    scenarioContract: true,
+                    scenarioCredit: true,
+                    scenarioTips: true
+                },
+                'risky': {
+                    customerName: '박민수',
+                    propertyAddress: '서울시 마포구 홍대입구역 789-12',
+                    depositType: '전세',
+                    depositAmount: '5억원',
+                    monthlyRent: '-',
+                    contractPeriod: '2년',
+                    legalScore: '60',
+                    financialScore: '30',
+                    requestedAnalysis: '집주인 재정상태 + 법적 위험성',
+                    contractSituation: '계약은 했는데 아직 이사 전이에요',
+                    additionalInfo: '위험 요소가 발견된 부동산',
+                    insuranceAvailable: '조건부 가입',
+                    insurancePremium: '5만원',
+                    insuranceLimit: '최대 5억원',
+                    recommendedInsurance: 'DB손해보험',
+                    loanAvailable: '조건부 대출',
+                    loanLimit: '3억원',
+                    recommendedBank: '국민은행',
+                    scenarioAuction: true,
+                    scenarioFraud: true,
+                    scenarioContact: true,
+                    scenarioPrice: true,
+                    scenarioContract: true,
+                    scenarioCredit: true,
+                    scenarioTips: true
+                },
+                'excellent': {
+                    customerName: '이수진',
+                    propertyAddress: '서울시 송파구 잠실동 345-67',
+                    depositType: '전세',
+                    depositAmount: '3억 5천만원',
+                    monthlyRent: '-',
+                    contractPeriod: '2년',
+                    legalScore: '98',
+                    financialScore: '95',
+                    requestedAnalysis: '집주인 재정상태 + 법적 위험성',
+                    contractSituation: '계약은 했는데 아직 이사 전이에요',
+                    additionalInfo: '매우 안전한 부동산',
+                    insuranceAvailable: '가입 가능',
+                    insurancePremium: '2.5만원',
+                    insuranceLimit: '최대 3.5억원',
+                    recommendedInsurance: 'DB손해보험, 현대해상, 삼성화재',
+                    loanAvailable: '대출 가능',
+                    loanLimit: '2.8억원',
+                    recommendedBank: '국민은행, 신한은행, 우리은행',
+                    scenarioAuction: true,
+                    scenarioFraud: true,
+                    scenarioContact: true,
+                    scenarioPrice: true,
+                    scenarioContract: true,
+                    scenarioCredit: true,
+                    scenarioTips: true
+                }
+            };
+
+            const template = templates[type];
+            if (template) {
+                Object.keys(template).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'checkbox') {
+                            element.checked = template[key];
+                        } else {
+                            element.value = template[key];
+                        }
+                    }
+                });
+                calculateTotalScore();
+                updatePreview();
+                showNotification(`📋 ${type === 'safe' ? '안전한 전세' : type === 'monthly' ? '월세 계약' : type === 'risky' ? '위험 부동산' : '우수 부동산'} 템플릿이 로드되었습니다.`, 'info');
+            }
+        }
+
+        /**
+         * 알림 표시
+         */
+        function showNotification(message, type = 'info') {
+            // 기존 알림 제거
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // 새 알림 생성
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+
+            // DOM에 추가
+            document.body.appendChild(notification);
+
+            // 3초 후 자동 제거
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+
+        // 페이지 로드 시 미리보기 업데이트
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+        });
+    </script>
+</body>
+</html>

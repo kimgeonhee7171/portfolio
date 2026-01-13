@@ -1,0 +1,2040 @@
+.analysis-item .analysis-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.analysis-item .analysis-desc {
+    font-size: 0.85rem;
+    color: #475569;
+    margin-top: 0.5rem;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #1a202c;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.report-container {
+    max-width: 402px;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid #f3f4f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 헤더 */
+.report-header {
+    background: #f8fafc;
+    color: #374151;
+    padding: 0.5rem 1rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.header-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.company-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    color: #1e40af;
+    letter-spacing: -0.02em;
+}
+
+.report-meta {
+    background: #ffffff;
+    padding: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.property-info-table {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    padding: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    table-layout: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.table-header {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.5rem;
+    text-align: center;
+    letter-spacing: -0.01em;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    display: block;
+    margin: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.info-label {
+    background: #f8fafc;
+    color: #6b7280;
+    font-weight: 600;
+    padding: 0.5rem 0.3rem;
+    font-size: 0.75rem;
+    letter-spacing: -0.01em;
+    width: 25%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.info-value {
+    background: #ffffff;
+    color: #374151;
+    font-weight: 600;
+    padding: 0.5rem 0.3rem;
+    font-size: 0.75rem;
+    letter-spacing: -0.01em;
+    text-align: center;
+    vertical-align: middle;
+    width: 25%;
+    word-wrap: break-word;
+}
+
+/* 1열 행 스타일 (첫 번째와 마지막 행) */
+tr:first-child .info-value,
+tr:last-child .info-value {
+    width: 100%;
+    text-align: left;
+    padding-left: 1rem;
+}
+
+/* colspan="3"가 적용된 셀 스타일 */
+.info-value[colspan="3"] {
+    width: 100%;
+    text-align: left;
+    padding-left: 1rem;
+    box-sizing: border-box;
+}
+
+/* 4열 행 스타일 (보증금 유형 + 상세유형, 보증금 + 월세) */
+tr:nth-child(2) td,
+tr:nth-child(3) td {
+    width: 25%;
+    max-width: 25%;
+    min-width: 25%;
+    box-sizing: border-box;
+    padding: 0.5rem 0.75rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 4열 행에서 라벨과 값의 비율 조정 - 균일한 크기로 변경 */
+tr:nth-child(2) .info-label,
+tr:nth-child(3) .info-label {
+    width: 25%;
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.5rem 0.3rem;
+    max-width: 100%;
+}
+
+tr:nth-child(2) .info-value,
+tr:nth-child(3) .info-value {
+    width: 25%;
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.5rem 0.3rem;
+    max-width: 100%;
+}
+/* 마지막 행 스타일 - 구분선이 없으므로 불필요 */
+
+/* 호버 효과 */
+tr:hover .info-label {
+    background: #f1f5f9;
+}
+
+tr:hover .info-value {
+    background: #f8fafc;
+}
+
+/* 고객 개인화 정보 섹션 */
+.customer-info-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.customer-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.customer-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1e40af;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+}
+
+.customer-title .customer-name {
+    color: #000000 !important;
+}
+
+.customer-subtitle {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin: 0;
+    font-weight: 500;
+}
+
+.customer-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 600;
+    min-width: 100px;
+    position: relative;
+}
+
+.detail-label::after {
+    content: '';
+    position: absolute;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 60%;
+    background: #e5e7eb;
+}
+
+.detail-value {
+    font-size: 0.85rem;
+    color: #374151;
+    font-weight: 600;
+    text-align: right;
+    flex: 1;
+    margin-left: 1rem;
+}
+
+/* 메인 콘텐츠 */
+.report-content {
+    padding: 1rem;
+    flex: 1;
+}
+
+/* 푸터 */
+.report-footer {
+    background: #f8fafc;
+    color: #374151;
+    padding: 1rem 2rem;
+    text-align: center;
+    border-top: 2px solid #e5e7eb;
+    margin-top: auto;
+    margin-bottom: 4rem; /* 64px */
+}
+
+.footer-logo {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #1f2937;
+}
+
+.footer-info {
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* 인쇄 스타일 */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .report-container {
+        box-shadow: none;
+        max-width: none;
+        border: none;
+    }
+    
+    .report-header {
+        background: #2d3748;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* 상세 정보 모달박스 */
+.detail-footer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 402px;
+    background: #ffffff;
+    border: 2px solid #ef4444;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 1001;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: none;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.detail-footer.active {
+    display: block;
+}
+
+/* 모달 애니메이션 */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+        scale: 0.9;
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+        scale: 1;
+    }
+}
+
+/* 모달 배경 오버레이 */
+.detail-footer::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.detail-footer.active::before {
+    opacity: 1;
+}
+
+/* 모바일 반응형 - 402px 사이즈 유지 */
+@media (max-width: 768px) {
+    .detail-footer {
+        width: 402px;
+        max-height: 85vh;
+        border-radius: 8px;
+        /* 화면이 402px보다 작을 때만 스크롤 허용 */
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .detail-footer::before {
+        background: rgba(0, 0, 0, 0.6);
+    }
+}
+
+/* 매우 작은 화면에서만 전체 너비 사용 */
+@media (max-width: 420px) {
+    .detail-footer {
+        width: 95%;
+        margin: 0 2.5%;
+    }
+}
+
+.detail-header {
+    background: #ef4444;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1002;
+    border-radius: 10px 10px 0 0;
+}
+
+.detail-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+}
+
+.close-button {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+.close-button:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+
+.close-button:active {
+    transform: scale(0.95);
+}
+
+.detail-content {
+    padding: 1.5rem;
+    background: #ffffff;
+}
+
+.detail-section {
+    margin-bottom: 1.5rem;
+}
+
+.detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.detail-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #374151;
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.detail-item {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.1rem;
+    border-left: 3px solid #9ca3af;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.detail-item-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 0.25rem 0;
+}
+
+.detail-item-desc {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* 경매 시나리오 스타일 */
+.auction-scenario {
+    margin-bottom: 1.5rem;
+}
+
+.scenario-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem;
+    background: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+}
+
+.scenario-item:hover {
+    background: #f9fafb;
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.scenario-item.positive {
+    border-left: 4px solid #10b981;
+}
+
+.scenario-item.mortgage-risk {
+    border-left: 4px solid #ef4444;
+    background: linear-gradient(90deg, rgba(239,68,68,0.08) 0%, rgba(239,68,68,0.02) 100%);
+}
+
+.scenario-item.jeonse-warning {
+    border-left: 4px solid #f59e0b;
+    background: linear-gradient(90deg, rgba(245,158,11,0.1) 0%, rgba(245,158,11,0.03) 100%);
+}
+
+.scenario-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    min-width: 72px;
+    color: #475569;
+    letter-spacing: -0.01em;
+}
+
+.scenario-bar {
+    width: max(60px, min(100%, calc(var(--bar-ratio, 0.5) * 240px)));
+    height: 22px;
+    border-radius: 999px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+    position: relative;
+    transition: width 0.4s ease;
+}
+
+.scenario-item.positive .scenario-bar {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.scenario-item.mortgage-risk .scenario-bar {
+    background: linear-gradient(90deg, #f97373, #dc2626);
+}
+
+.scenario-item.jeonse-warning .scenario-bar {
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+.scenario-amount {
+    font-size: 0.9rem;
+    font-weight: 800;
+    min-width: 105px;
+    letter-spacing: -0.01em;
+    text-align: right;
+    margin-left: auto;
+}
+
+.amount-positive {
+    color: #047857;
+    background: #d1fae5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.scenario-amount.amount-positive {
+    font-size: 0.85rem;
+}
+
+.scenario-amount.amount-mortgage,
+.scenario-amount.amount-jeonse {
+    font-size: 0.85rem;
+}
+
+.amount-mortgage {
+    color: #b91c1c;
+    background: #fee2e2;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.amount-jeonse {
+    color: #92400e;
+    background: #fef3c7;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.expected-bid {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #374151;
+    font-weight: 600;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+/* 보호 정보 스타일 */
+.protection-info {
+    display: flex;
+    justify-content: space-around;
+    gap: 0.5rem;
+}
+
+.protection-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    flex: 1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.protection-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.protection-icon {
+    font-size: 1.5rem;
+}
+
+.protection-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    text-align: center;
+}
+
+/* 경매 상세 정보 스타일 */
+.auction-details {
+    margin-top: 1.5rem;
+}
+
+/* 손실 분석 스타일 */
+.loss-analysis {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.loss-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.loss-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.loss-amount {
+    font-size: 1rem;
+    font-weight: 800;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+}
+
+.loss-amount.safe {
+    color: #047857;
+    background: #d1fae5;
+}
+
+.loss-amount.danger {
+    color: #dc2626;
+    background: #fecaca;
+}
+
+.loss-amount.warning {
+    color: #b45309;
+    background: #fde68a;
+}
+
+/* 시나리오 분석 스타일 */
+.scenario-analysis {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.risk-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.risk-desc {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.risk-probability {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1e40af;
+    background: #dbeafe;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* 대응 방안 스타일 */
+.response-measures {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.measure-item {
+    padding: 1rem;
+    background: #f0fdf4;
+    border-radius: 8px;
+    border-left: 3px solid #10b981;
+}
+
+.measure-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #047857;
+    margin-bottom: 0.5rem;
+}
+
+.measure-desc {
+    font-size: 0.85rem;
+    color: #374151;
+    line-height: 1.4;
+}
+
+.process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 3px solid #ef4444;
+}
+
+.step-number {
+    width: 24px;
+    height: 24px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 0.25rem 0;
+}
+
+.step-desc {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+.rights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.right-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #f0fdf4;
+    border-radius: 8px;
+    border-left: 3px solid #10b981;
+}
+
+.right-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.right-text {
+    font-size: 0.85rem;
+    color: #374151;
+    line-height: 1.4;
+}
+
+.risk-measures {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.risk-item {
+    padding: 1rem;
+    background: #fef3c7;
+    border-radius: 8px;
+    border-left: 3px solid #f59e0b;
+}
+
+.risk-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #92400e;
+    margin: 0 0 0.5rem 0;
+}
+
+.risk-desc {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+}
+
+.measure {
+    font-size: 0.8rem;
+    color: #374151;
+    font-weight: 600;
+    margin: 0;
+    padding: 0.5rem;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+/* 하단 고정 CTA 버튼 바 */
+.bottom-cta-bar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 402px;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 0.75rem 0;
+}
+
+.cta-buttons {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    padding: 0 1rem;
+}
+
+.cta-button {
+    flex: 1;
+    background: transparent;
+    color: #6b7280;
+    border: none;
+    border-radius: 0;
+    padding: 0.75rem 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    position: relative;
+}
+
+.cta-button:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 1px;
+    background: #e5e7eb;
+    transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+    color: #374151;
+    background: #f8fafc;
+}
+
+.cta-button.active {
+    color: #1e40af;
+    font-weight: 600;
+    background: #eff6ff;
+    border-bottom: 3px solid #1e40af;
+}
+/* 섹션 숨김/표시 */
+.section-content {
+    display: none;
+}
+
+.section-content.active {
+    display: block;
+}
+
+/* 최종 검토 결과 타이틀 */
+.final-review-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    text-align: center;
+}
+
+.title-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.title-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-align: center;
+}
+
+.title-subtitle {
+    font-size: 0.9rem;
+    margin: 0;
+    opacity: 0.9;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* 상태 카드 */
+.report-content .status-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1.0rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid #f3f4f6;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.report-content .status-card.safe {
+    border-color: #e5e7eb;
+    background: #ffffff;
+    border-left: 4px solid #6b7280;
+}
+
+.report-content .status-card.warning {
+    border-color: #f59e0b;
+    background: #ffffff;
+    border-left: 4px solid #f59e0b;
+}
+
+.report-content .status-card.danger {
+    border-color: #ef4444;
+    background: #ffffff;
+    border-left: 4px solid #ef4444;
+}
+
+.report-content .status-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.report-content .status-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+}
+.status-header-with-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+}
+.status-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    flex: 1;
+}
+.detail-button {
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+.detail-button:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+}
+
+.detail-button:active {
+    transform: translateY(0);
+}
+
+.report-content .status-header::after {
+    content: '';
+    position: absolute;
+    bottom: -0.75rem;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #f3f4f6;
+}
+
+.report-content .status-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.report-content .status-icon.safe {
+    background: transparent;
+    color: #6b7280;
+    border: 2px solid #6b7280;
+}
+
+.report-content .status-icon.warning {
+    background: #f59e0b;
+    color: white;
+}
+
+.report-content .status-icon.danger {
+    background: #ef4444;
+    color: white;
+}
+
+.report-content .status-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    color: #374151;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+.report-content .status-description {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+.report-content .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+    margin-top: 1.25rem;
+}
+
+.report-content .risk-item {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.report-content .risk-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.report-content .risk-item.no-risk {
+    border-color: #10b981;
+    background: #ffffff;
+    border-left: 3px solid #10b981;
+}
+
+.report-content .risk-item.has-risk {
+    border-color: #ef4444;
+    background: #ffffff;
+    border-left: 3px solid #ef4444;
+}
+
+.report-content .risk-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.report-content .risk-icon.no-risk {
+    background: #10b981;
+    color: white;
+}
+
+.report-content .risk-icon.has-risk {
+    background: #ef4444;
+    color: white;
+}
+
+.report-content .risk-content {
+    flex: 1;
+}
+
+.report-content .risk-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #374151;
+    letter-spacing: -0.01em;
+}
+
+.report-content .risk-status {
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+}
+
+.report-content .risk-status.no-risk {
+    color: #047857;
+    font-weight: 700;
+    background: #d1fae5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.report-content .risk-status.has-risk {
+    color: #dc2626;
+    font-weight: 700;
+    background: #fecaca;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+/* 보험 & 대출 섹션 스타일 */
+.insurance-loan-section {
+    margin-bottom: 0.8rem;
+    padding: 0.8rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.insurance-loan-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0.3rem 0.4rem;
+    background: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.info-item .info-label {
+    background: transparent;
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 0.72rem;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    text-align: left;
+    flex-shrink: 0;
+    position: relative;
+    margin-right: 12px;
+    max-width: none;
+}
+
+.info-item .info-label::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 90%;
+    background: #e5e7eb;
+}
+
+.info-item .info-value {
+    background: transparent;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.72rem;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    text-align: left;
+    flex: 1;
+    margin-left: 4px;
+    align-self: center;
+}
+
+.info-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: #1e40af;
+}
+.info-value.success {
+    color: #047857;
+    background: #d1fae5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    display: inline-flex;
+    flex: none;
+    align-self: flex-start;
+}
+
+.info-value.warning {
+    color: #b45309;
+    background: #fde68a;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    display: inline-flex;
+    flex: none;
+    align-self: flex-start;
+}
+
+.info-value.danger {
+    color: #dc2626;
+    background: #fecaca;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    display: inline-flex;
+    flex: none;
+    align-self: flex-start;
+}
+
+/* 점수 분석 스타일 */
+.score-analysis {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+/* 세부 분석 그리드 */
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.analysis-item {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.analysis-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.analysis-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.analysis-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 50%;
+    border: 2px solid #e5e7eb;
+}
+
+.analysis-category {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.analysis-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.analysis-score {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e40af;
+    letter-spacing: -0.01em;
+}
+/* 점수 시각화 스타일 */
+.score-visualization {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+}
+
+.score-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.score-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.score-range {
+    margin-bottom: 1.5rem;
+}
+
+.range-bar {
+    height: 8px;
+    background: linear-gradient(90deg, #dc2626 0%, #f59e0b 25%, #eab308 50%, #22c55e 75%, #10b981 100%);
+    border-radius: 4px;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.range-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #dc2626 0%, #f59e0b 25%, #eab308 50%, #22c55e 75%, #10b981 100%);
+    border-radius: 4px;
+    width: 0%;
+}
+
+.range-marker {
+    position: absolute;
+    top: -4px;
+    width: 16px;
+    height: 16px;
+    background: #1e40af;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transform: translateX(-50%);
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #718096;
+}
+
+.range-labels span:nth-child(1) {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.range-labels span:nth-child(2) {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.range-labels span:nth-child(3) {
+    color: #eab308;
+    font-weight: 600;
+}
+
+.range-labels span:nth-child(4) {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.score-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+
+.status-badge.safe {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.status-badge.warning {
+    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+}
+
+.status-badge.caution {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.status-badge.danger {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.status-desc {
+    font-size: 0.8rem;
+    color: #4a5568;
+    margin: 0;
+}
+
+/* 문서 검증 그리드 스타일 */
+.verification-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+}
+
+.verification-item {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.25rem;
+    border: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin: 0.75rem 0;
+}
+
+.verification-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.verification-item.no-risk {
+    border-color: #10b981;
+    background: #ffffff;
+    border-left: 3px solid #10b981;
+}
+
+.verification-item.has-risk {
+    border-color: #ef4444;
+    background: #ffffff;
+    border-left: 3px solid #ef4444;
+}
+
+.verification-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.verification-icon.no-risk {
+    background: #10b981;
+    color: white;
+}
+
+.verification-icon.has-risk {
+    background: #ef4444;
+    color: white;
+}
+
+.verification-content {
+    flex: 1;
+}
+
+.verification-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #374151;
+    letter-spacing: -0.01em;
+}
+
+.verification-status {
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+}
+
+.verification-status.no-risk {
+    color: #047857;
+    font-weight: 700;
+    background: #d1fae5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.verification-status.has-risk {
+    color: #dc2626;
+    font-weight: 700;
+    background: #fecaca;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* ========================================
+   전세사기 종류 섹션 스타일
+   ======================================== */
+
+.fraud-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+}
+
+.fraud-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.fraud-section-desc {
+    font-size: 0.9rem;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.fraud-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.fraud-card {
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.fraud-card:hover {
+    border-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+.fraud-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.fraud-card:hover::before {
+    left: 100%;
+}
+
+.fraud-icon {
+    font-size: 0; 
+    width: 0;
+    height: 0;
+    margin-bottom: 0;
+}
+
+.fraud-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.2rem;
+}
+
+.fraud-desc {
+    font-size: 0.85rem;
+    color: #6b7280;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* ========================================
+   전세사기 상세 정보 스타일
+   ======================================== */
+
+.fraud-detail-content {
+    padding: 1rem 0;
+}
+
+.fraud-summary,
+.fraud-methods,
+.fraud-prevention {
+    margin-bottom: 1.5rem;
+}
+
+.fraud-summary:last-child,
+.fraud-methods:last-child,
+.fraud-prevention:last-child {
+    margin-bottom: 0;
+}
+
+.detail-subtitle {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    display: block;
+    color: #1e40af;
+}
+
+.summary-text {
+    font-size: 0.9rem;
+    color: #374151;
+    line-height: 1.6;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+    margin: 0;
+}
+
+.methods-list,
+.prevention-list {
+    padding-left: 0;
+    margin-left: 1rem;
+}
+
+.method-item,
+.prevention-item {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    padding-left: 0.5rem;
+    list-style-type: disc;
+    list-style-position: outside;
+    color: #374151;
+}
+
+.method-item:last-child,
+.prevention-item:last-child {
+    border-bottom: none;
+}
+
+.method-item::before,
+.prevention-item::before {
+    content: none;
+}
+
+.method-item {
+    color: #374151;
+}
+
+.prevention-item {
+    color: #374151;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .fraud-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .fraud-card {
+        padding: 1rem;
+    }
+    
+    .fraud-icon {
+        font-size: 0;
+    }
+    
+    .fraud-title {
+        font-size: 1rem;
+    }
+    
+    .fraud-desc {
+        font-size: 0.8rem;
+    }
+}
+
+/* ========================================
+   접기/펼치기 카드 스타일
+   ======================================== */
+
+.status-card.collapsible {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.status-card.collapsible:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 60px;
+}
+
+.status-badge.safe {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.status-badge.warning {
+    background: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fde68a;
+}
+
+.status-badge.danger {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.collapse-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.collapse-button:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.collapse-icon {
+    font-size: 0.8rem;
+    color: #6b7280;
+    transition: transform 0.3s ease;
+}
+
+.collapsible-content {
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+.collapsible-content-expanded {
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 1rem;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .card-status-indicator {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .status-badge {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.4rem;
+        min-width: 50px;
+    }
+    
+    .collapse-icon {
+        font-size: 0.7rem;
+    }
+    
+    /* verification-item 모바일 스타일 */
+    .verification-grid {
+        gap: 1rem;
+    }
+    
+    .verification-item {
+        padding: 1rem;
+        margin-bottom: 10px;
+    }
+}
+
+/* ========================================
+   섹션 구분선 스타일
+   ======================================== */
+
+.section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #e5e7eb 20%, #d1d5db 50%, #e5e7eb 80%, transparent 100%);
+    margin: 2rem 0;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .section-divider {
+        margin: 1.5rem 0;
+    }
+}
+
+/* ========================================
+   전세사기 동적 경고 스타일 (Fraud Scenario)
+   ======================================== */
+.warning-title-dynamic {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #b91c1c; /* 짙은 빨간색 */
+    text-align: center;
+    padding: 0.8rem 1rem;
+    margin: 1.5rem 0 1rem 0;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 2px solid #ef4444;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
+    line-height: 1.4;
+}
+
+.fraud-cards-grid.checked-grid {
+    border: 1px dashed #fecaca;
+    padding: 1rem 0.5rem;
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+}
+
+.fraud-card.warning-highlight {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, #fef7f7 0%, #fef2f2 100%);
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+}
+
+.fraud-card.warning-highlight .fraud-title {
+    color: #dc2626;
+}
+
+.section-divider-mini {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #fecaca 30%, #fecaca 70%, transparent 100%);
+    margin: 1rem 0;
+}
+
+/* ========================================
+   보험/대출 최종 진단 코멘트 스타일
+   ======================================== */
+
+.final-comment-section {
+    margin-top: 1.5rem;
+    padding: 1.2rem;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.final-comment-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #1e40af;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed #c7d2fe;
+}
+
+.final-comment-desc {
+    font-size: 0.78rem;
+    color: #374151;
+    line-height: 1.4;
+    margin: 0;
+}

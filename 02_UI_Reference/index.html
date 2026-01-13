@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보증지킴이 - 전세 사기 방지 서비스</title>
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="apple-touch-icon" href="../images/logo.png">
+    <link rel="stylesheet" href="index.css">
+    
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1330722015430909'); 
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1330722015430909&ev=PageView&noscript=1"
+    /></noscript>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- 트래픽 추적 시스템 -->
+    <script src="traffic_tracker.js"></script>
+</head>
+<body class="fixed-width modal-first-active">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#" data-page="home">
+                    <img src="../images/logo.png" alt="보증지킴이" class="logo-img">
+                    <span class="logo-text">보증지킴이</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" data-page="home">메인</a></li>
+                <li><a href="#" data-page="about">소개</a></li>
+                <li><a href="#" data-page="services">서비스</a></li>
+                <li><a href="#" data-page="cases">성공사례</a></li>
+                <li><a href="#" data-page="contact">문의</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="app">
+    <!-- 1단계: 인지단계 - Hero Section -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>전세사기 걱정 끝!<br>보증지킴이로 안전하게 지켜요</h1>
+                
+                <!-- 말풍선 대화 섹션 -->
+                <div class="conversation-section">
+                    <div class="speech-bubble worry">
+                            <div class="speaker">😰 전세 계약자</div>
+                            <div class="message">"보증금 떼일까봐 불안해요..."</div>
+                    </div>
+                    
+                    <div class="speech-bubble solution">
+                            <div class="message">"보증지킴이가 지켜드릴게요!"</div>
+                    </div>
+                </div>
+                
+                
+                <!-- 사용자 흐름 기반 특징 -->
+                <div class="hero-features-flow">
+                    <div class="flow-item" data-step="1">
+                        <div class="flow-icon-wrapper">
+                            <span class="flow-icon">📝</span>
+                        </div>
+                        <span class="flow-text">정보 입력</span>
+                        <span class="flow-desc">3분이면 완료</span>
+                    </div>
+
+                    <span class="flow-separator">→</span>
+
+                    <div class="flow-item" data-step="2">
+                        <div class="flow-icon-wrapper">
+                            <span class="flow-icon">🔍</span>
+                        </div>
+                        <span class="flow-text">꼼꼼한 검증</span>
+                        <span class="flow-desc">전문가 분석</span>
+                    </div>
+
+                    <span class="flow-separator">→</span>
+
+                    <div class="flow-item" data-step="3">
+                        <div class="flow-icon-wrapper">
+                            <span class="flow-icon">📊</span>
+                        </div>
+                        <span class="flow-text">결과 확인</span>
+                        <span class="flow-desc">안전한 계약</span>
+                    </div>
+                </div>
+                
+                <button class="cta-button" id="hero-cta" onclick="trackPopupClick('hero_cta', 'cta_button', 'open'); scrollToSection('problem-solution');">
+                    내 보증금 안전도 확인하기!
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1단계: 인지단계 - Problem Awareness Section -->
+    <section id="problem-solution" class="problem-solution">
+        <div class="container">
+            <h2 class="section-title">🤔 전세 계약 전 체크포인트</h2>
+            <p class="section-subtitle-gray">주요 위험 요소 미리 확인</p>
+            
+            <!-- 단계별 진행 표시 -->
+            <div class="problem-progress">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-indicator">1</div>
+                    <div class="step-label">재정 상황</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-indicator">2</div>
+                    <div class="step-label">법적 상태</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-indicator">3</div>
+                    <div class="step-label">시세 적정성</div>
+                </div>
+            </div>
+            
+            <!-- 문제 카드 컨테이너 -->
+            <div class="problem-container">
+                <div class="problem-card active" data-card="1">
+                    <div class="card-header">
+                        <span class="card-icon">💸</span>
+                        <h3 class="card-title">집주인 재정 상황</h3>
+                    </div>
+                    <div class="card-badge">위험도 높음</div>
+                    <p class="card-description"><strong>보증금 회수 위험</strong><br>집주인의 부채나 압류 상황을 미리 확인하면 안전해요</p>
+                    <div class="card-example">
+                        <div class="example-title">⚠️ 실제 사례</div>
+                        <div class="example-text">"집주인이 수억원 빚으로 압류당한 상태에서 전세 계약을 받았습니다. 보증금 수천만원~수억원을 돌려받지 못한 피해 사례가 있습니다."</div>
+                    </div>
+                </div>
+                
+                <div class="problem-card" data-card="2">
+                    <div class="card-header">
+                        <span class="card-icon">🏗️</span>
+                        <h3 class="card-title">건물 법적 상태</h3>
+                    </div>
+                    <div class="card-badge">위험도 높음</div>
+                    <p class="card-description"><strong>불법 건축물 확인</strong><br>증축이나 용도 변경 이력이 있는지 체크가 필요해요</p>
+                    <div class="card-example">
+                        <div class="example-title">⚠️ 실제 사례</div>
+                        <div class="example-text">"2층 불법 증축으로 인해 철거 명령을 받은 건물에서 전세 계약을 했습니다. 갑작스러운 철거로 인한 피해가 발생했습니다."</div>
+                    </div>
+                </div>
+                
+                <div class="problem-card" data-card="3">
+                    <div class="card-header">
+                        <span class="card-icon">📈</span>
+                        <h3 class="card-title">시세 적정성</h3>
+                    </div>
+                    <div class="card-badge">위험도 중간</div>
+                    <p class="card-description"><strong>합리적인 가격인지</strong><br>주변 시세와 비교해서 적정한 가격인지 확인해보세요</p>
+                    <div class="card-example">
+                        <div class="example-title">⚠️ 실제 사례</div>
+                        <div class="example-text">"주변 시세 대비 수천만원~수억원 과다 계약으로 유도했습니다. 시세 차이만큼 손실이 발생한 피해 사례입니다."</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 네비게이션 버튼 -->
+            <div class="problem-navigation">
+                <button class="nav-button prev" onclick="changeProblemCard(-1)">
+                    <span>← 이전</span>
+                </button>
+                <div class="nav-dots">
+                    <span class="dot active" data-dot="1"></span>
+                    <span class="dot" data-dot="2"></span>
+                    <span class="dot" data-dot="3"></span>
+                </div>
+                <button class="nav-button next" onclick="changeProblemCard(1)">
+                    <span>다음 →</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2단계: 호기심단계 - How It Works Section -->
+    <section id="curiosity" class="features">
+        <div class="container">
+            <h2 class="section-title">🔍 3단계 체크 시스템</h2>
+            <p class="section-subtitle-small">꼼꼼한 검증으로 빠른 확인</p>
+            
+            <!-- 단계별 안내 -->
+            
+            <!-- 단계별 체크 과정 -->
+            <div class="steps-container">
+                <div class="step-item" data-step="1">
+                    <div class="step-header" onclick="toggleStep(1)">
+                        <div class="step-number">1</div>
+                        <div class="step-title">💳 재정 위험 분석</div>
+                        <div class="step-toggle">+</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-icon">🔍</div>
+                        <div class="step-description">
+                            <p>집주인의 부채, 압류 등 <br> 재정 위험 요소를 분석</p>
+                            
+                            <div class="analysis-items">
+                                <div class="analysis-grid">
+                                    <div class="analysis-item">부채 현황</div>
+                                    <div class="analysis-item">압류 등기</div>
+                                    <div class="analysis-item">신용도</div>
+                                    <div class="analysis-item">회수 가능성</div>
+                                </div>
+                            </div>
+                            
+                            <div class="check-points">
+                                <div class="check-grid">
+                                    <div class="check-item">부채 > 보증금</div>
+                                    <div class="check-item">압류 등기</div>
+                                    <div class="check-item">연체자 명단</div>
+                                    <div class="check-item">낮은 신용등급</div>
+                                </div>
+                            </div>
+                            
+                            <div class="step-example">
+                                <strong>예시:</strong> "집주인이 수억원 빚으로 압류당한 상태입니다."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-item" data-step="2">
+                    <div class="step-header" onclick="toggleStep(2)">
+                        <div class="step-number">2</div>
+                        <div class="step-title">🏠 시세 분석</div>
+                        <div class="step-toggle">+</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-icon">🏠</div>
+                        <div class="step-description">
+                            <p>국토교통부 실거래가와 주변 시세 비교 분석</p>
+                            
+                            <div class="analysis-items">
+                                <div class="analysis-grid">
+                                    <div class="analysis-item">실거래가</div>
+                                    <div class="analysis-item">주변 유사 매물</div>
+                                    <div class="analysis-item">층수/방향/면적</div>
+                                    <div class="analysis-item">과다/과소 계약</div>
+                                </div>
+                            </div>
+                            
+                            <div class="check-points">
+                                <div class="check-grid">
+                                    <div class="check-item">20% 이상</div>
+                                    <div class="check-item">급격한 상승</div>
+                                    <div class="check-item">큰 가격 차이</div>
+                                    <div class="check-item">시세 조작 의심</div>
+                                </div>
+                            </div>
+                            
+                            <div class="step-example">
+                                <strong>예시:</strong> "주변 시세 대비 수천만원 과다 계약 위험"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-item" data-step="3">
+                    <div class="step-header" onclick="toggleStep(3)">
+                        <div class="step-number">3</div>
+                        <div class="step-title">🏗️ 법적 위험 분석</div>
+                        <div class="step-toggle">+</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-icon">📋</div>
+                        <div class="step-description">
+                            <p>불법 건물, 용도 위반, 안전진단 등 <br> 법적 위험 요소 분석</p>
+                            
+                            <div class="analysis-items">
+                                <div class="analysis-grid">
+                                    <div class="analysis-item">등기사항 확인</div>
+                                    <div class="analysis-item">불법 증축/개조</div>
+                                    <div class="analysis-item">용도 위반</div>
+                                    <div class="analysis-item">안전진단 이력</div>
+                                </div>
+                            </div>
+                            
+                            <div class="check-points">
+                                <div class="check-grid">
+                                    <div class="check-item">철거 위험</div>
+                                    <div class="check-item">사용 제한</div>
+                                    <div class="check-item">안전진단 미실시</div>
+                                    <div class="check-item">무허가 건물</div>
+                                </div>
+                            </div>
+                            
+                            <div class="step-example">
+                                <strong>예시:</strong> "2층 불법 증축으로 철거 위험"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mockup-section">
+                <div class="mockup-image">
+                    <h3>
+                        종합 체크 리포트 📋
+                    </h3>
+                    <p>"이 집 진짜 괜찮을까?"에 대한 <strong>확실한 답</strong>을<br>전세사기 걱정 끝! 리포트로 <strong>바로</strong> 알려드려요! ✨</p>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- 2.5단계: 안전도 점수 시스템 - Safety Score Section -->
+    <section id="safety-score-section" class="safety-score-section">
+        <div class="container">
+            <h2 class="section-title">안전도 점수 시스템</h2>
+            <p class="section-subtitle">3단계 분석으로 정확한 점수 제공</p>
+            
+            <!-- 점수 시각화 -->
+            <div class="score-visualization">
+                <div class="score-circle">
+                    <div class="score-number">85</div>
+                    <div class="score-label">안전도 점수</div>
+                </div>
+                <div class="score-details">
+                    <div class="score-category">
+                        <div class="category-item">
+                            <div class="category-icon">💳</div>
+                            <div class="category-info">
+                                <div class="category-name">집주인 재정</div>
+                                <div class="category-score">90점</div>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-icon">🏠</div>
+                            <div class="category-info">
+                                <div class="category-name">시세 적정성</div>
+                                <div class="category-score">75점</div>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <div class="category-icon">🏗️</div>
+                            <div class="category-info">
+                                <div class="category-name">건물 법적 상태</div>
+                                <div class="category-score">90점</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 점수 분석 -->
+            <div class="score-analysis">
+                <h3 class="analysis-title">📈 전체 점수대에서의 위치</h3>
+                <div class="score-range">
+                    <div class="range-bar">
+                        <div class="range-fill"></div>
+                        <div class="range-marker" style="left: 85%;"></div>
+                    </div>
+                    <div class="range-labels">
+                        <span>위험 (0-30)</span>
+                        <span>주의 (31-60)</span>
+                        <span>보통 (61-80)</span>
+                        <span>안전 (81-100)</span>
+                    </div>
+                </div>
+                <div class="score-status">
+                    <div class="status-badge safe">안전</div
+                    <p class="status-desc">전체 계약 중 상위 15%에 해당하는 안전한 계약입니다</p>
+                </div>
+            </div>
+            
+        <!-- 리포트 미리보기 섹션 (402px 최적화) -->
+        <div class="report-preview-section" id="report-preview-section">
+            <div class="report-preview-container">
+
+                <div class="preview-headline">
+                    <span class="preview-kicker">전문가 분석 리포트 미리보기</span>
+                    <h3 class="preview-title" style="display: none;"></h3> 
+                    <p class="preview-subtitle">
+                        당신의 보증금을 지키기 위한 핵심 정보를 요약했습니다.
+                    </p>
+                </div>
+
+                <div class="preview-risk-grid">
+                    <h4 class="risk-grid-title">경매 시나리오 분석</h4>
+                    
+                    <div class="risk-scenario-breakdown">
+                        <div class="scenario-bar-item positive">
+                            <div class="item-header">
+                                <div class="item-label">예상 낙찰가</div>
+                                <div class="item-value">2억 5,000만원</div>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 83%;"></div>
+                        </div>
+                        </div>
+
+                        <div class="scenario-bar-item negative">
+                            <div class="item-header">
+                                <div class="item-label">총 선순위 채권액</div>
+                                <div class="item-value">1억 8,000만원</div>
+                                </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 60%;"></div>
+                                </div>
+                            </div>
+                        
+                        <div class="scenario-bar-item primary">
+                            <div class="item-header">
+                                <div class="item-label">나의 보증금 (기준)</div>
+                                <div class="item-value">3억 0,000만원</div>
+                                </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="risk-summary-text danger-alert">
+                        <span class="risk-text"><strong>경매 시 77% 손실 위험!</strong> 이 물건은 보증금 회수 가능성이 매우 낮습니다. 상세 리포트를 통해 계약을 재고하세요.</span>
+                            </div>
+                        </div>
+
+                <div class="preview-features">
+                    <h4 class="feature-grid-title">🔍 핵심 안전 분석 3가지</h4>
+                    <div class="feature-grid-wrapper">
+                        <div class="preview-feature-card">
+                            <div class="feature-icon-circle">
+                                <span class="feature-icon">💸</span>
+                            </div>
+                            <div class="feature-text-group">
+                                <span class="feature-text">보증금 회수율</span>
+                                <span class="feature-subtext">경매 시나리오 상세 분석</span>
+                            </div>
+                        </div>
+                        <div class="preview-feature-card">
+                            <div class="feature-icon-circle">
+                                <span class="feature-icon">🛡️</span>
+                            </div>
+                            <div class="feature-text-group">
+                                <span class="feature-text">보험 가입 기준</span>
+                                <span class="feature-subtext">HUG 및 HF 보증 적합 여부</span>
+                            </div>
+                        </div>
+                        <div class="preview-feature-card">
+                            <div class="feature-icon-circle">
+                                <span class="feature-icon">📄</span>
+                            </div>
+                            <div class="feature-text-group">
+                                <span class="feature-text">필수 서류 검토</span>
+                                <span class="feature-subtext">등기부등본, 건축물대장 분석</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-cta-footer">
+                    <p class="cta-notice">🚨 전세사기 피해는 "계약 시점"에 결정됩니다. 지금 바로 전문가 분석을 시작하세요!</p>
+                    <button class="cta-button" onclick="trackPopupClick('preview_cta', 'cta_button', 'open'); openModal();">
+                        지금 바로! 확인하기
+                    </button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3단계: 신뢰단계 - Trust Section -->
+    <section id="trust" class="trust-section">
+        <div class="container">
+            <h2 class="section-title">🛡️ 안전하고 신뢰받는 서비스</h2>
+            <p class="section-subtitle-gray">전문가 분석으로 소중한 보증금을 지켜드려요</p>
+            
+            <!-- 신뢰 배지 -->
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <div class="badge-icon">🔒</div>
+                    <div class="badge-content">
+                        <div class="badge-title">개인정보 보호</div>
+                        <div class="badge-desc">SSL 암호화로 안전하게</div>
+                    </div>
+                </div>
+                <div class="trust-badge">
+                    <div class="badge-icon">📊</div>
+                    <div class="badge-content">
+                        <div class="badge-title">전문가 분석</div>
+                        <div class="badge-desc">부동산 전문가 검증</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 실제 검증 사례 -->
+            <div class="verification-cases">
+                <h3 class="cases-title">🚨 실제 발견된 위험 사례들</h3>
+                <p class="cases-subtitle">이런 위험들이 미리 발견되지 않았다면...</p>
+                
+                <!-- 순차적 카드 컨테이너 -->
+                <div class="cases-sequential">
+                    <div class="case-item critical case-1" data-delay="0">
+                        <div class="case-icon">💸</div>
+                        <div class="case-content">
+                            <div class="case-title">집주인 수억원 부채 발견</div>
+                            <div class="case-desc">등기부등본에서 수억원 부채와 압류 등기 확인<br><strong>보증금 수천만원~수억원 위험!</strong></div>
+                            <div class="case-location">📍 강남구 아파트</div>
+                        </div>
+                    </div>
+                    <div class="case-item critical case-2" data-delay="500">
+                        <div class="case-icon">🏠</div>
+                        <div class="case-content">
+                            <div class="case-title">시세 30% 과다 부풀리기</div>
+                            <div class="case-desc">실거래가 대비 수천만원~수억원 과다 계약 시도<br><strong>시세 차이만큼 손실 위험!</strong></div>
+                            <div class="case-location">📍 서초구 오피스텔</div>
+                        </div>
+                    </div>
+                    <div class="case-item critical case-3" data-delay="1000">
+                        <div class="case-icon">🏗️</div>
+                        <div class="case-content">
+                            <div class="case-title">불법 증축 건물</div>
+                            <div class="case-desc">허가받지 않은 2층 증축으로 철거 위험<br><strong>전세 계약 무효 위험!</strong></div>
+                            <div class="case-location">📍 마포구 단독주택</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 경고 메시지 (마지막에 나타남) -->
+                <div class="cases-warning case-warning" data-delay="1500">
+                    <p>⚠️ <strong>이런 위험들을 미리 발견하지 못했다면 수백만원부터 수억원까지 소중한 보증금을 잃을 수 있어요.</strong><br><br>💡 보증지킴이가 24시간 이내 전문가 분석으로 위험을 꼼꼼히 확인해드려요!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 3단계: 신뢰단계 - Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">💬 고객 후기</h2>
+            <div class="testimonials-scroll">
+                <div class="testimonials-track">
+                <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"집주인 빚 문제를 미리 알 수 있어서 피해를 예방했어요!"</p>
+                        <div class="testimonial-author">김○○님</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"불법 건물 위험을 정확히 파악해서 안전하게 계약했어요."</p>
+                        <div class="testimonial-author">이○○님</div>
+                </div>
+                <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"시세 조작을 미리 발견하고 확신을 가지고 계약했어요."</p>
+                        <div class="testimonial-author">박○○님</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"빠른 시간 내에 명확한 답을 받아서 정말 도움이 됐어요."</p>
+                        <div class="testimonial-author">최○○님</div>
+                </div>
+                <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"전세사기 걱정 없이 안전하게 계약할 수 있었어요."</p>
+                        <div class="testimonial-author">정○○님</div>
+                    </div>
+                    <!-- 반복을 위한 복사본 -->
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"집주인 빚 문제를 미리 알 수 있어서 피해를 예방했어요!"</p>
+                        <div class="testimonial-author">김○○님</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"불법 건물 위험을 정확히 파악해서 안전하게 계약했어요."</p>
+                        <div class="testimonial-author">이○○님</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                        <p class="testimonial-text">"시세 조작을 미리 발견하고 확신을 가지고 계약했어요."</p>
+                        <div class="testimonial-author">박○○님</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- FAQ 섹션 -->
+    <section id="faq-section" class="faq-section">
+        <div class="container">
+            <h2 class="section-title">💬 자주 묻는 질문</h2>
+            <p class="section-subtitle-gray">궁금한 점들을 미리 확인해보세요</p>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">❓</span>
+                        <span class="faq-text">보증지킴이로 보증금을 지킬 수 있나요?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>네, 가능합니다! 전세사기 피해는 수백만원부터 수억원까지 다양한데, 미리 검증해서 위험한 매물을 피하면 그 피해를 예방할 수 있어요. 보증지킴이로 소중한 보증금을 지키는 것이죠.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">⏰</span>
+                        <span class="faq-text">검증 결과는 언제 받나요?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>신청 후 24시간 이내에 결과를 이메일로 발송해드립니다. 급한 경우에는 더 빠르게 처리해드릴 수 있어요.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">🔒</span>
+                        <span class="faq-text">개인정보는 안전한가요?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>네, 개인정보는 암호화되어 안전하게 처리됩니다. 검증 목적으로만 사용되며, 다른 용도로는 절대 사용하지 않아요.</p>
+                    </div>
+                </div>
+                
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">🏠</span>
+                        <span class="faq-text">모든 부동산 검증 가능한가요?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>아파트, 오피스텔, 빌라, 단독주택 등 대부분의 부동산을 검증할 수 있습니다. 다만 일부 특수한 경우는 사전 문의해주세요.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">📞</span>
+                        <span class="faq-text">추가 상담이 가능한가요?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>네, 분석 결과에 대해 1:1 상담이 가능합니다. 궁금한 점이 있으시면 언제든 문의해주세요.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4단계: 욕구단계 - Urgency Section -->
+    <section id="urgency-section" class="urgency-section">
+        <div class="container">
+            <h2 class="section-title">⏰ 지금 바로 안전 확인하세요</h2>
+            
+            <!-- 인터랙티브 카운터 -->
+            <div class="urgency-counter">
+                <div class="counter-item">
+                    <div class="counter-number" data-target="412">0</div>
+                    <div class="counter-label">올해 전세사기 피해 건수</div>
+                    </div>
+                <div class="counter-item">
+                    <div class="counter-number" data-target="3.2">0</div>
+                    <div class="counter-label">평균 피해 금액 (억원)</div>
+                </div>
+                <div class="counter-item">
+                    <div class="counter-number" data-target="42">0</div>
+                    <div class="counter-label">보증지킴이가 예방한 사례</div>
+                </div>
+                </div>
+            
+            <!-- 사용자 걱정 상황 말풍선 -->
+            <div class="scenario-container">
+                <h3 class="scenario-title">💭 이런 걱정들, 혹시 있으시죠?</h3>
+                <div class="worry-bubbles">
+                    <div class="worry-bubble" data-scenario="1">
+                        <div class="bubble-content">
+                            <div class="user-avatar">😰</div>
+                            <div class="bubble-text">"집주인이 갑자기 연락이 안 돼요... <br> 혹시 사기일까요?"</div>
+            </div>
+                        <div class="bubble-tail"></div>
+                    </div>
+                    
+                    <div class="worry-bubble" data-scenario="2">
+                        <div class="bubble-content">
+                            <div class="user-avatar">🤔</div>
+                            <div class="bubble-text">"시세보다 훨씬 싸게 나왔는데... <br> 뭔가 이상해요"</div>
+                        </div>
+                        <div class="bubble-tail"></div>
+                    </div>
+                    
+                    <div class="worry-bubble" data-scenario="3">
+                        <div class="bubble-content">
+                            <div class="user-avatar">😅</div>
+                            <div class="bubble-text">"계약서에 이상한 조항이 있어요... <br> 이게 정상인가요?"</div>
+                        </div>
+                        <div class="bubble-tail"></div>
+                    </div>
+                </div>
+                
+                <div class="solution-bubble">
+                    <div class="bubble-content">
+                        <div class="solution-avatar">💬</div>
+                        <div class="bubble-text">"걱정 마세요!<br>보증지킴이가 위험성을 분석해드릴게요! ✨"</div>
+                    </div>
+                    <div class="bubble-tail solution-tail"></div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- 5단계: 구매단계 - Final CTA Section -->
+    <section id="purchase" class="purchase-final-cta-section">
+        <div class="container">
+            
+            <div class="blue-background-container">
+                
+                <div class="final-conversion-card-replicate">
+                    
+                    <h3 class="card-replicate-title">"이 집 진짜 괜찮을까?"<br>전세사기 걱정 끝! ✨</h3>
+                    
+                    <p class="card-replicate-desc">보증지킴이와 함께 안전한 계약 시작해요!</p>
+
+                    <button class="cta-button purchase-replicate-btn" onclick="trackPopupClick('final_cta_replicate', 'cta_button', 'open'); openModal();">
+                지금 체크해보기!
+            </button>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Multi-Step Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="multistep-modal">
+            <div class="processing-overlay" id="processingOverlay">
+                <div class="processing-content">
+                    <div class="processing-spinner"></div>
+                    <div class="processing-message">데이터를 전송 중이에요.<br>잠시만 기다려주세요!</div>
+                </div>
+            </div>
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button class="modal-back-btn" onclick="goToPreviousStep()" id="backBtn" style="display: none;">←</button>
+                <div class="modal-title" id="modalTitle">어떤 유형의 계약인가요?</div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <!-- Progress Indicator -->
+            <div class="progress-indicator">
+                <div class="progress-dot" data-step="1"></div>
+                <div class="progress-dot" data-step="2"></div>
+                <div class="progress-dot" data-step="3"></div>
+                <div class="progress-dot" data-step="4"></div>
+                <div class="progress-dot" data-step="5"></div>
+                <div class="progress-dot" data-step="6"></div>
+                <div class="progress-dot" data-step="7"></div>
+            </div>
+                
+            <!-- Modal Content -->
+            <div class="modal-content-wrapper">
+            <div class="modal-scroll-area">
+                <!-- Step 1: 거래 유형 선택 -->
+                <div class="step-content active" data-step="1">
+                    <div class="step-question">어떤 유형의 계약을 준비하고 계신가요?</div>
+                    <div class="option-buttons">
+                        <button class="option-btn" data-value="월세" data-traffic="1">
+                            월세
+                        </button>
+                        <button class="option-btn" data-value="전세" data-traffic="2">
+                            전세
+                        </button>
+                        <button class="option-btn" data-value="반전세" data-traffic="3">
+                            반전세
+                        </button>
+                        <button class="option-btn" data-value="매매" data-traffic="4">
+                            매매
+                        </button>
+                    </div>
+                    <!-- Navigation -->
+                <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step1" disabled>이전</button>
+                        <button class="nav-btn next" onclick="goToNextStep()" id="nextBtn-step1">다음</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: 거주 상태 선택 -->
+                <div class="step-content" data-step="2">
+                    <div class="step-question">어떤 상황에서 리포트가 필요하신가요?</div>
+                    <div class="option-buttons">
+                        <button class="option-btn" data-value="계약예정">
+                            계약 예정의 집이예요
+                        </button>
+                        <button class="option-btn" data-value="계약완료">
+                            계약은 했는데 아직 이사 전이예요
+                        </button>
+                        <button class="option-btn" data-value="현재거주">
+                            지금 살고 있는 집이예요
+                        </button>
+                        <button class="option-btn" data-value="둘러보기">
+                            그냥 둘러보고 있어요
+                        </button>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step2">이전</button>
+                        <button class="nav-btn next" onclick="goToNextStep()" id="nextBtn-step2">다음</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2-2: 현재 상태 상세 선택 -->
+                <div class="step-content" data-step="2-2">
+                    <div class="step-question">현재 상황을 더 자세히 알려주세요</div>
+                    <div class="option-buttons">
+                        <button class="option-btn" data-value="주소미정">
+                            계약할 집의 주소가 안 정해졌어요
+                        </button>
+                        <button class="option-btn" data-value="집선택중">
+                            계약하고 싶은 집이 있어요
+                        </button>
+                        <button class="option-btn" data-value="가계약금">
+                            가계약금만 지급한 상황이예요
+                        </button>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step2-2">이전</button>
+                        <button class="nav-btn next" onclick="goToNextStep()" id="nextBtn-step2-2">다음</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: 금액 입력 -->
+                <div class="step-content" data-step="3">
+                    <div class="step-question" id="amountQuestion">보증금은 얼마인가요?</div>
+                    <div class="amount-input-section">
+                        <div class="amount-quick-buttons">
+                            <button class="amount-quick-btn" onclick="addAmount(100000000)">+1억원</button>
+                            <button class="amount-quick-btn" onclick="addAmount(10000000)">+1천만원</button>
+                            <button class="amount-quick-btn" onclick="addAmount(1000000)">+1백만원</button>
+                        </div>
+                        <input type="text" class="amount-input" id="amountInput" placeholder="금액을 입력하세요" oninput="formatAmount(this)">
+                        <div class="amount-text" id="amountText" style="display: none;"></div>
+                </div>
+                
+                    <!-- 월세 금액 입력 (월세/반전세 선택 시에만 표시) -->
+                    <div class="monthly-rent-section" id="monthlyRentSection" style="display: none;">
+                        <div class="step-question" style="margin-top: 2rem;">월세는 얼마인가요?</div>
+                        <div class="amount-input-section">
+                            <div class="amount-quick-buttons">
+                                <button class="amount-quick-btn" onclick="addMonthlyAmount(100000)">+10만원</button>
+                                <button class="amount-quick-btn" onclick="addMonthlyAmount(50000)">+5만원</button>
+                                <button class="amount-quick-btn" onclick="addMonthlyAmount(10000)">+1만원</button>
+                            </div>
+                            <input type="text" class="amount-input" id="monthlyAmountInput" placeholder="월세 금액을 입력하세요" oninput="formatMonthlyAmount(this)">
+                            <div class="amount-text" id="monthlyAmountText" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step3">이전</button>
+                        <button class="nav-btn next" onclick="goToNextStep()" id="nextBtn-step3">다음</button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: 계약 기간 선택 -->
+                <div class="step-content" data-step="4">
+                    <div class="step-question">계약기간은 얼마나 되시나요?</div>
+                    <div class="option-buttons">
+                        <button class="option-btn" data-value="6개월">
+                            6개월
+                        </button>
+                        <button class="option-btn" data-value="12개월">
+                            12개월
+                        </button>
+                        <button class="option-btn" data-value="24개월">
+                            24개월
+                        </button>
+                        <button class="option-btn" data-value="기타">
+                            그 외
+                        </button>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step4">이전</button>
+                        <button class="nav-btn next" onclick="goToNextStep()" id="nextBtn-step4">다음</button>
+                    </div>
+                </div>
+                
+                <!-- Step 5: 주소 입력 -->
+                <div class="step-content" data-step="5">
+                    <div class="step-question">분석받을 주소를 알려주세요</div>
+                    <div class="address-input-section" style="margin: 0 auto 1rem auto; max-width: 300px; width: 100%;">
+                        <div class="address-field">
+                            <label class="address-label">시/도, 구/군</label>
+                            <input type="text" class="address-input-small" id="addressCityDistrict" placeholder="예: 서울특별시 강남구" oninput="updateFraudStats()">
+                        </div>
+                        <div class="address-field">
+                            <label class="address-label">동/읍/면</label>
+                            <input type="text" class="address-input-small" id="addressDong" placeholder="예: 역삼동">
+                        </div>
+                        <div class="address-field">
+                            <label class="address-label">지번 또는 도로명</label>
+                            <input type="text" class="address-input-small" id="addressNumber" placeholder="예: 123-45 또는 테헤란로 123">
+                        </div>
+                        <div class="address-field">
+                            <label class="address-label">상세주소</label>
+                            <input type="text" class="address-input-small" id="addressDetail" placeholder="예: 101호, 2층">
+                        </div>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step5">이전</button>
+                        <button class="nav-btn next" onclick="goToNextStep()" id="nextBtn-step5">다음</button>
+                    </div>
+                </div>
+                
+                <!-- Step 6: 본인 정보 입력 -->
+                <div class="step-content" data-step="6">
+                    <div class="step-question">리포트를 받을 연락처를 알려주세요</div>
+                    <div class="personal-info-section" style="margin: 0 auto 1rem auto; max-width: 300px; width: 100%;">
+                        <div class="address-field">
+                            <label class="address-label">이름 *</label>
+                            <input type="text" class="address-input-small" id="userName" placeholder="홍길동" required>
+                        </div>
+                        <div class="address-field">
+                            <label class="address-label">연락처 *</label>
+                            <input type="tel" class="address-input-small" id="userPhone" placeholder="010-1234-5678" required oninput="formatPhoneNumber(this)" onfocus="handlePhoneFocus(this)" onblur="handlePhoneBlur(this)" onkeydown="handlePhoneKeyDown(this, event)">
+                        </div>
+                        <div class="address-field">
+                            <label class="address-label">이메일 *</label>
+                            <input type="email" class="address-input-small" id="userEmail" placeholder="example@email.com" required>
+                        </div>
+                        <div class="privacy-agreement">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="privacyAgreement" required>
+                                <label for="privacyAgreement" class="checkbox-label">
+                                    <span class="checkbox-text">
+                                        <strong>개인정보 수집 및 이용에 동의합니다</strong><br>
+                                        <span class="privacy-detail">
+                                            • 수집목적: 부동산 분석 보고서 전달<br>
+                                            • 수집항목: 이름, 연락처, 이메일<br>
+                                            • 보유기간: 보고서 지급 후 1개월<br>
+                                            • 동의를 거부할 권리가 있으며, 거부 시 서비스 이용이 제한됩니다.
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step6">이전</button>
+                        <button class="nav-btn next" onclick="goToNextStep()" id="nextBtn-step6">다음</button>
+                    </div>
+                </div>
+                
+                <!-- Step 7: 지역별 전세사기 통계 + 결제 정보 -->
+                <div class="step-content" data-step="7">
+                    <div class="step-question">리포트를 통해 더 확인해보세요!</div>
+                    <div class="fraud-stats-section" style="margin: 1rem auto; max-width: 300px; width: 100%;">
+                        <div class="fraud-stats-card" id="fraudStatsCard">
+                            <div class="stats-header">
+                                <div class="stats-location" id="statsLocation">서울특별시 강남구</div>
+                                <div class="stats-year">2025년 기준</div>
+                            </div>
+                            <div class="stats-content">
+                                <div class="stat-item">
+                                    <div class="stat-label">전세사기 발생 건수</div>
+                                    <div class="stat-value" id="fraudCount">12건</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">피해 금액</div>
+                                    <div class="stat-value" id="fraudAmount">3억 2천만원</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">전국 대비 위험도</div>
+                                    <div class="stat-value" id="riskLevel">보통</div>
+                                </div>
+                            </div>
+                            <div class="stats-warning">
+                                <div class="warning-icon">⚠️</div>
+                                <div class="warning-text">
+                                    해당 지역에서 전세사기가 발생하고 있습니다.<br>
+                                    <strong>보증지킴이</strong>로 안전한 거래를 확인하세요!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-info-section" style="margin: 1rem auto; max-width: 300px; width: 100%;">
+                        <div class="payment-info-card">
+                            <h4 class="payment-card-title">현재 리포트가 무료!</h4>
+                            <div class="price-container">
+                                <span class="original-price">정상가 13,900원</span>
+                                <span class="discount-info">100% 할인 이벤트!</span>
+                            </div>
+                            <div class="final-price-container">
+                                <span class="final-price">0원 (무료)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <div class="modal-navigation sticky-nav">
+                        <button class="nav-btn prev" onclick="goToPreviousStep()" id="prevBtn-step7">이전</button>
+                        <button class="nav-btn next" onclick="completeForm()" id="nextBtn-step7">신청하기!</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+    <!-- JavaScript 파일 로드 -->
+    <script src="router.js"></script>
+    <script src="index.js?v=2025110901"></script>
+    <script src="scroll_tracker.js"></script>
+    
+    <!-- 하단 CTA 바 -->
+    <header class="bottom-bar">
+        <div class="container">
+            <div class="top-bar-content">
+                <div class="logo">
+                    <img src="../images/logo.png" alt="보증지킴이" class="logo-img">
+                    <span class="logo-text">보증지킴이</span>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="top-bar-btn" onclick="trackButtonClick('Funnel', 'Click', 'CTA_Bottom'); openModal();">
+                        바로 신청하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>

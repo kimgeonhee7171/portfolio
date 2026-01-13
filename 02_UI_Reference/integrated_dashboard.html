@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통합 분석 대시보드 - 보증지킴이</title>
+    <link rel="icon" type="image/png" href="../images/logo.png"> 
+    <link rel="apple-touch-icon" href="../images/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 20px 30px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .stat-number {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #e53e3e;
+        }
+
+        .btn-danger:hover {
+            background: #c53030;
+        }
+
+        .view-controls {
+            display: flex;
+            gap: 10px;
+            margin: 0 20px;
+        }
+
+        .view-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+            font-size: 0.9rem;
+            padding: 10px 16px;
+        }
+
+        .view-btn:hover {
+            background: #cbd5e0;
+            border-color: #cbd5e0;
+            transform: none;
+        }
+
+        .view-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .view-btn.active:hover {
+            background: #5a67d8;
+            border-color: #5a67d8;
+        }
+
+        .session-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .session-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .session-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .session-id {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            color: #667eea;
+            background: #f0f4ff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .session-summary {
+            margin-top: 15px;
+        }
+
+        .session-summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .session-summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .session-summary-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .session-summary-value {
+            color: #2d3748;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-header h3 {
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #f7fafc;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .timestamp {
+            color: #718096;
+            font-size: 0.85rem;
+        }
+
+        .category {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .event-type {
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .event-type.scroll {
+            background: #e6fffa;
+            color: #00a896;
+        }
+
+        .event-type.funnel {
+            background: #fff5e6;
+            color: #d97706;
+        }
+
+        .action {
+            color: #4a5568;
+        }
+
+        .label {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .section-name {
+            color: #2d3748;
+            font-weight: 600;
+            background: #f0f4ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .no-data-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .no-data h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+
+        .no-data p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+            
+            .session-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>통합 분석 대시보드</h1>
+            <p>스크롤 추적과 퍼널 분석을 통합한 사용자 행동 분석</p>
+        </div>
+
+        <!-- 컨트롤 패널 -->
+        <div class="controls">
+            <div class="stats" id="statsContainer">
+                <!-- 통계 정보가 여기에 동적으로 추가됩니다 -->
+            </div>
+            <div class="view-controls">
+                <button onclick="toggleView('session')" id="sessionViewBtn" class="btn view-btn active">세션 분석 (그룹)</button>
+                <button onclick="toggleView('event')" id="eventViewBtn" class="btn view-btn">📋 이벤트 목록 (전체)</button>
+            </div>
+            <div>
+                <a href="index.html" class="btn">🏠 홈으로 돌아가기</a>
+                <button onclick="clearAllData()" class="btn btn-danger">🗑️ 모든 데이터 초기화</button>
+            </div>
+        </div>
+
+        <!-- 콘텐츠 -->
+        <div class="content">
+            <div id="loadingIndicator" class="loading">
+                <div class="spinner"></div>
+                <p>데이터를 불러오는 중...</p>
+            </div>
+
+            <!-- 세션 목록 영역 -->
+            <div id="sessionListContainer" style="display: none;">
+                <h3>📋 세션 목록</h3>
+                <div class="session-list" id="sessionList">
+                    <!-- 세션 목록이 여기에 동적으로 추가됩니다 -->
+                </div>
+            </div>
+
+            <!-- 이벤트 목록 영역 -->
+            <div id="eventListContainer" style="display: none;">
+                <h3>📋 전체 이벤트 목록</h3>
+                <div class="table-container">
+                    <table id="eventTable">
+                        <thead>
+                            <tr>
+                                <th>세션 ID</th>
+                                <th>시간</th>
+                                <th>유형</th>
+                                <th>섹션 이름</th>
+                                <th>액션</th>
+                                <th>라벨</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventTableBody">
+                            <!-- 이벤트 데이터가 여기에 동적으로 추가됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 상세 정보 영역 -->
+            <div id="detailViewContainer" style="display: none;">
+                <div class="detail-header">
+                    <button onclick="showSessionList()" class="btn">← 목록으로 돌아가기</button>
+                    <h3 id="detailSessionTitle">세션 상세 정보</h3>
+                </div>
+                <div class="table-container">
+                    <table id="detailTable">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th>유형</th>
+                                <th>섹션 이름</th>
+                                <th>액션</th>
+                                <th>라벨</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailTableBody">
+                            <!-- 상세 데이터가 여기에 동적으로 추가됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="noDataMessage" class="no-data" style="display: none;">
+                <div class="no-data-icon">📊</div>
+                <h3>추적된 데이터가 없습니다</h3>
+                <p>홈페이지에서 스크롤과 퍼널을 진행해보시면<br>여기서 통합 분석 데이터를 확인할 수 있습니다.</p>
+                <a href="index.html" class="btn" style="margin-top: 20px;">홈페이지로 이동하기</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- traffic_tracker.js 로드 -->
+    <script src="traffic_tracker.js"></script>
+    
+    <script>
+        /**
+         * ========================================
+         * 통합 분석 대시보드 JavaScript
+         * ========================================
+         */
+
+        // 트래픽 API URL 직접 정의 (traffic_tracker.js와 독립적으로 동작)
+        const TRAFFIC_API_URL = 'https://script.google.com/macros/s/AKfycbwcwe6bcn1zjnnO_A-XDoKgjIryJEVdBgFUWkmYdHmXKzYpo5GMb41mChTieMYzwsDw/exec';
+        const TRAFFIC_API_URL_GET = TRAFFIC_API_URL; 
+        const TRAFFIC_API_URL_DELETE = TRAFFIC_API_URL + '?action=delete_all';
+
+        /**
+         * 섹션 ID와 한글 이름 매핑
+         */
+        const SECTION_NAMES = {
+            'hero': '1. 히어로 섹션',
+            'problem-solution': '2. 문제 제기 섹션',
+            'curiosity': '3. 작동 방식 (시스템)',
+            'safety-score-section': '4. 안전도 점수 시스템',
+            'trust': '5. 신뢰 섹션',
+            'testimonials': '6. 고객 후기',
+            'faq-section': '7. 자주 묻는 질문',
+            'urgency-section': '8. 긴급성/가치 섹션',
+            'purchase': '9. 최종 CTA 섹션',
+            'Modal_Open_CTA': '퍼널 시작 (CTA 클릭)'
+        };
+
+        // 전역 변수로 모든 이벤트 데이터 저장
+        let allEvents = [];
+        let currentView = 'session'; // 현재 뷰 모드 ('session' 또는 'event')
+
+        /**
+         * 페이지 로드 시 데이터 로드 및 표시
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllData();
+        });
+
+        /**
+         * ⭐ [수정됨] 트래픽 전용 API에서 모든 데이터를 불러와서 통합
+         */
+        async function loadAllData() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            loadingIndicator.style.display = 'block';
+            document.getElementById('noDataMessage').style.display = 'none';
+
+            if (TRAFFIC_API_URL_GET === 'YOUR_TRAFFIC_API_URL_HERE' || !TRAFFIC_API_URL_GET) {
+                 // 로컬 환경이고 URL이 설정되지 않은 경우, 로컬 데이터 사용 (기존 로직 유지)
+                if (isLocalHost()) {
+                     allEvents = fetchDataFromServer(); // traffic_tracker.js의 로컬 함수 호출
+                     finalizeDataLoad(allEvents);
+                     return;
+                }
+                
+                console.error('❌ 트래픽 API URL이 설정되지 않아 데이터를 가져올 수 없습니다.');
+                loadingIndicator.style.display = 'none';
+                document.getElementById('noDataMessage').style.display = 'block';
+                document.querySelector('#noDataMessage h3').textContent = '트래픽 API URL 미설정';
+                document.querySelector('#noDataMessage p').innerHTML = '데이터를 보려면 `traffic_tracker.js`에 트래픽 전용 Google Sheets Web App URL을 설정해야 합니다.';
+                return;
+            }
+
+            try {
+                // 트래픽 전용 API에서 데이터 가져오기 (GET 요청)
+                const response = await fetch(TRAFFIC_API_URL_GET, {
+                    method: 'GET',
+                    cache: 'no-cache'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
+                }
+
+                // 응답을 JSON으로 파싱 (Google Sheets Web App의 doGet 반환 형식에 의존)
+                const data = await response.json();
+                
+                if (Array.isArray(data)) {
+                    allEvents = data;
+                } else if (data.events && Array.isArray(data.events)) {
+                    // Google Sheets Web App이 { events: [...] } 형태로 반환할 경우
+                    allEvents = data.events;
+                } else {
+                    throw new Error('서버 응답 형식이 올바르지 않습니다.');
+                }
+                
+                finalizeDataLoad(allEvents);
+
+            } catch (error) {
+                console.error('❌ 트래픽 API 데이터 로드 중 오류 발생:', error);
+                
+                // API 실패 시 로컬 데이터 폴백
+                console.log('📡 API 실패, 로컬 데이터로 폴백 시도...');
+                allEvents = fetchDataFromServer();
+                finalizeDataLoad(allEvents);
+            }
+        }
+
+        /**
+         * 데이터 로드 후 공통 처리 (정렬, 통계 업데이트, 뷰 표시)
+         */
+        function finalizeDataLoad(events) {
+            // 시간순 정렬
+            events.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+            // 로딩 인디케이터 숨기기
+            document.getElementById('loadingIndicator').style.display = 'none';
+
+            if (events.length === 0) {
+                // 데이터가 없는 경우
+                document.getElementById('noDataMessage').style.display = 'block';
+                return;
+            }
+
+            // 데이터가 있는 경우
+            updateStats(events);
+            displaySessionList(events);
+            showSessionView(); // 초기 로드 시 세션 뷰 표시
+        }
+
+        /**
+         * 세션 목록 표시
+         */
+        function displaySessionList(events) {
+            const sessionListContainer = document.getElementById('sessionListContainer');
+            const sessionList = document.getElementById('sessionList');
+            
+            // 세션별로 그룹화
+            const sessionGroups = {};
+            events.forEach(item => {
+                const sessionId = item.sessionId || 'unknown';
+                if (!sessionGroups[sessionId]) {
+                    sessionGroups[sessionId] = [];
+                }
+                sessionGroups[sessionId].push(item);
+            });
+
+            // 세션 목록 생성
+            sessionList.innerHTML = '';
+            Object.keys(sessionGroups).forEach(sessionId => {
+                const sessionData = sessionGroups[sessionId];
+                const summary = calculateSessionSummary(sessionData);
+                
+                const sessionItem = document.createElement('div');
+                sessionItem.className = 'session-item';
+                sessionItem.onclick = () => showSessionDetails(sessionId);
+                
+                sessionItem.innerHTML = `
+                    <div class="session-id">${sessionId}</div>
+                    <div class="session-summary">
+                        <div class="session-summary-item">
+                            <span class="session-summary-label">최대 스크롤 도달:</span>
+                            <span class="session-summary-value">${summary.maxScrollReach}</span>
+                        </div>
+                        <div class="session-summary-item">
+                            <span class="session-summary-label">최종 퍼널 단계:</span>
+                            <span class="session-summary-value">${summary.finalFunnelStep}</span>
+                        </div>
+                        <div class="session-summary-item">
+                            <span class="session-summary-label">총 이벤트:</span>
+                            <span class="session-summary-value">${sessionData.length}개</span>
+                        </div>
+                    </div>
+                `;
+                sessionList.appendChild(sessionItem);
+            });
+
+            sessionListContainer.style.display = 'block';
+        }
+
+        /**
+         * 세션 요약 정보 계산
+         */
+        function calculateSessionSummary(sessionData) {
+            const scrollEvents = sessionData.filter(item => item.category === 'Scroll');
+            const funnelEvents = sessionData.filter(item => item.category === 'Funnel');
+            
+            // 최대 스크롤 도달 지점
+            const maxScrollReach = scrollEvents.length > 0 
+                ? SECTION_NAMES[scrollEvents[scrollEvents.length - 1].label] || 'N/A'
+                : '스크롤 없음';
+            
+            // 최종 퍼널 단계
+            const finalFunnelStep = funnelEvents.length > 0 
+                ? funnelEvents[funnelEvents.length - 1].label
+                : '퍼널 없음';
+            
+            return { maxScrollReach, finalFunnelStep };
+        }
+
+        /**
+         * 세션 상세 정보 표시
+         */
+        function showSessionDetails(sessionId) {
+            const sessionListContainer = document.getElementById('sessionListContainer');
+            const detailViewContainer = document.getElementById('detailViewContainer');
+            const detailSessionTitle = document.getElementById('detailSessionTitle');
+            const detailTableBody = document.getElementById('detailTableBody');
+            
+            // 선택된 세션의 이벤트만 필터링
+            const sessionEvents = allEvents.filter(item => item.sessionId === sessionId);
+            
+            // 상세 정보 제목 업데이트
+            detailSessionTitle.textContent = `세션 상세 정보 - ${sessionId}`;
+            
+            // 상세 테이블 생성
+            detailTableBody.innerHTML = '';
+            sessionEvents.forEach(item => {
+                const sectionName = getSectionName(item);
+                const eventType = getEventType(item.category);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="timestamp">${formatTimestamp(item.timestamp)}</span></td>
+                    <td><span class="event-type ${eventType.toLowerCase()}">${eventType}</span></td>
+                    <td><span class="section-name">${sectionName}</span></td>
+                    <td><span class="action">${item.action}</span></td>
+                    <td><span class="label">${item.label}</span></td>
+                `;
+                detailTableBody.appendChild(row);
+            });
+            
+            // 화면 전환
+            sessionListContainer.style.display = 'none';
+            detailViewContainer.style.display = 'block';
+        }
+
+        /**
+         * 세션 목록으로 돌아가기
+         */
+        function showSessionList() {
+            const sessionListContainer = document.getElementById('sessionListContainer');
+            const detailViewContainer = document.getElementById('detailViewContainer');
+            
+            sessionListContainer.style.display = 'block';
+            detailViewContainer.style.display = 'none';
+        }
+
+        /**
+         * 뷰 모드 전환
+         */
+        function toggleView(viewMode) {
+            currentView = viewMode;
+            
+            // 버튼 상태 업데이트
+            document.getElementById('sessionViewBtn').classList.toggle('active', viewMode === 'session');
+            document.getElementById('eventViewBtn').classList.toggle('active', viewMode === 'event');
+            
+            if (viewMode === 'session') {
+                showSessionView();
+            } else if (viewMode === 'event') {
+                showEventView();
+            }
+        }
+
+        /**
+         * 세션 뷰 표시
+         */
+        function showSessionView() {
+            document.getElementById('sessionListContainer').style.display = 'block';
+            document.getElementById('eventListContainer').style.display = 'none';
+            document.getElementById('detailViewContainer').style.display = 'none';
+        }
+
+        /**
+         * 이벤트 뷰 표시
+         */
+        function showEventView() {
+            document.getElementById('sessionListContainer').style.display = 'none';
+            document.getElementById('eventListContainer').style.display = 'block';
+            document.getElementById('detailViewContainer').style.display = 'none';
+            
+            // 이벤트 목록 표시
+            displayEventList(allEvents);
+        }
+
+        /**
+         * 이벤트 목록 표시 (scroll_analytics.html의 기능)
+         */
+        function displayEventList(events) {
+            const eventTableBody = document.getElementById('eventTableBody');
+            
+            // 데이터를 시간 역순으로 정렬 (최신순)
+            const sortedEvents = events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            // 테이블 행 생성
+            eventTableBody.innerHTML = '';
+            sortedEvents.forEach(item => {
+                const sectionName = getSectionName(item);
+                const eventType = getEventType(item.category);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="session-id">${item.sessionId || 'N/A'}</span></td>
+                    <td><span class="timestamp">${formatTimestamp(item.timestamp)}</span></td>
+                    <td><span class="event-type ${eventType.toLowerCase()}">${eventType}</span></td>
+                    <td><span class="section-name">${sectionName}</span></td>
+                    <td><span class="action">${item.action}</span></td>
+                    <td><span class="label">${item.label}</span></td>
+                `;
+                eventTableBody.appendChild(row);
+            });
+        }
+
+        /**
+         * 섹션 이름 가져오기
+         */
+        function getSectionName(item) {
+            if (item.category === 'Scroll') {
+                return SECTION_NAMES[item.label] || 'N/A';
+            } else if (item.category === 'Funnel') {
+                return 'CTA/퍼널';
+            } else {
+                return 'N/A';
+            }
+        }
+
+        /**
+         * 이벤트 유형 가져오기
+         */
+        function getEventType(category) {
+            if (category === 'Scroll') {
+                return '스크롤';
+            } else if (category === 'Funnel') {
+                return '퍼널';
+            } else {
+                return '기타';
+            }
+        }
+
+
+        /**
+         * 통계 정보 업데이트
+         */
+        function updateStats(data) {
+            const statsContainer = document.getElementById('statsContainer');
+            
+            // 총 이벤트 수
+            const totalEvents = data.length;
+            
+            // 고유 세션 수
+            const uniqueSessions = new Set(data.map(item => item.sessionId).filter(id => id)).size;
+            
+            // 스크롤 이벤트 수
+            const scrollEvents = data.filter(item => item.category === 'Scroll').length;
+            
+            // 퍼널 이벤트 수
+            const funnelEvents = data.filter(item => item.category === 'Funnel').length;
+
+            statsContainer.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-number">${totalEvents}</div>
+                    <div>총 이벤트</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${uniqueSessions}</div>
+                    <div>고유 세션</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${scrollEvents}</div>
+                    <div>스크롤 이벤트</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">${funnelEvents}</div>
+                    <div>퍼널 이벤트</div>
+                </div>
+            `;
+        }
+
+        /**
+         * 타임스탬프를 읽기 쉬운 형식으로 변환
+         */
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        /**
+         * ⭐ [수정됨] 모든 트래픽 데이터 초기화 (트래픽 전용 API에 DELETE 요청)
+         */
+        async function clearAllData() {
+            if (!confirm('🚨 경고: 모든 트래픽 데이터를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) {
+                return;
+            }
+            
+            if (isLocalHost()) {
+                // 로컬 환경일 경우, 로컬 데이터만 삭제 (기존 traffic_tracker.js 함수 호출)
+                const success = clearAllDataFromServer();
+                if (success) location.reload();
+                return;
+            }
+            
+            // 도메인 환경일 경우, 트래픽 전용 API로 DELETE 요청 전송
+            if (TRAFFIC_API_URL_DELETE === 'YOUR_TRAFFIC_API_URL_HERE?action=delete_all' || !TRAFFIC_API_URL_DELETE) {
+                alert('⚠️ 트래픽 API 삭제 URL이 설정되지 않았습니다. traffic_tracker.js의 URL을 확인하세요.');
+                return;
+            }
+
+            try {
+                // 트래픽 전용 API로 DELETE 요청
+                const response = await fetch(TRAFFIC_API_URL_DELETE, {
+                    method: 'GET', // Google Apps Script의 do{Get/Post} 특성상 GET/POST 사용
+                    cache: 'no-cache'
+                });
+
+                // 응답 확인
+                if (response.ok) {
+                    alert('✅ 트래픽 데이터 삭제 요청 성공! 시트에서 삭제되었는지 확인하세요.');
+                    location.reload();
+                } else {
+                    throw new Error(`서버 응답 오류: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('❌ 트래픽 데이터 삭제 중 오류 발생:', error);
+                alert('❌ 데이터 삭제 중 오류가 발생했습니다. 콘솔을 확인해주세요.');
+            }
+        }
+    </script>
+</body>
+</html>

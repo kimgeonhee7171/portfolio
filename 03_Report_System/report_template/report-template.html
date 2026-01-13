@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- Google Analytics 4 (GA4) 측정 코드 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W7X130KM7E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-W7X130KM7E');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부동산 안전성 검증 보고서 - 보증지킴이</title>
+    <link rel="icon" type="image/png" href="../images/logo.png"> 
+    <link rel="apple-touch-icon" href="../images/logo.png">
+    <link rel="stylesheet" href="./report-template.css">
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1330722015430909');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1330722015430909&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+</head>
+<body>
+    <div class="report-container">
+        <!-- 헤더 -->
+        <div class="report-header">
+            <div class="header-content">
+                <img src="../images/logo.png" alt="보증지킴이" class="header-logo">
+                <h3 class="company-name">보증지킴이</h3>
+            </div>
+        </div>
+        <!-- 고객 개인화 정보 -->
+        <div class="customer-info-section section-content active" id="customer-section">
+            <div class="customer-header">
+                <h2 class="customer-title"><span class="customer-name">김철수님</span>을 위한 맞춤 리포트</h2>
+                <p class="customer-subtitle">안전한 전/월세 계약을 위한 전문 분석 결과입니다</p>
+            </div>
+            
+            <div class="customer-details">
+                <div class="detail-item">
+                    <span class="detail-label">요청하신 분석</span>
+                    <span class="detail-value" id="requestedAnalysis">집주인 재정상태 + 법적 위험성</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">계약 상황</span>
+                    <span class="detail-value" id="contractSituation">계약은 했는데 아직 이사 전이에요</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">추가사항</span>
+                    <span class="detail-value" id="additionalInfo">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">계약 예정기간</span>
+                    <span class="detail-value" id="contractPeriod">2년</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="report-content">
+            <!-- 기본 정보 섹션 -->
+            <div class="section-content active" id="basic-section">
+
+                <!-- 분석 조건 정보 -->
+                <div class="property-info-table">
+                    <div class="table-header">분석한 집 정보</div>
+                    <table class="info-table">
+                        <tbody>
+                            <tr>
+                                <td class="info-label">주소</td>
+                                <td class="info-value" id="propertyAddress" colspan="3">서울시 강남구 역삼동 123-45</td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">보증금 유형</td>
+                                <td class="info-value" id="depositType">전세</td>
+                                <td class="info-label">상세유형</td>
+                                <td class="info-value" id="detailType">일반임대</td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">보증금</td>
+                                <td class="info-value" id="depositAmount">3억원</td>
+                                <td class="info-label">월세</td>
+                                <td class="info-value" id="monthlyRent">-</td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">상황</td>
+                                <td class="info-value" id="residenceStatus" colspan="3">가계약금 지급 완료</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 종합 분석 결과 -->
+                <div class="score-analysis">
+                    <h3 class="analysis-title">종합 안전성 분석</h3>
+                    
+                    <!-- 점수 시각화 -->
+                    <div class="score-visualization" style="margin-top: 1.5rem;">
+                        <div class="score-circle">
+                            <div class="score-number" id="overallScore">85</div>
+                </div>
+                </div>
+                    
+                    <!-- 점수 범위 표시 -->
+                    <div class="score-range">
+                        <div class="range-bar">
+                            <div class="range-fill"></div>
+                            <div class="range-marker" style="left: 85%;"></div>
+                </div>
+                        <div class="range-labels">
+                            <span>위험 (0-30)</span>
+                            <span>주의 (31-60)</span>
+                            <span>보통 (61-80)</span>
+                            <span>안전 (81-100)</span>
+            </div>
+        </div>
+
+                    <!-- 점수 상태 -->
+                    <div class="score-status">
+                        <div class="status-badge safe" id="overallStatus">양호</div>
+                        <p class="status-desc" id="overallDescription">전반적으로 안전한 거래 가능</p>
+                    </div>
+
+                    <!-- 세부 분석 그리드 -->
+                    <div class="analysis-grid">
+                        <div class="analysis-item legal">
+                            <div class="analysis-header">
+                                <div class="analysis-icon">⚖️</div>
+                                <div class="analysis-category">법적 안전성</div>
+                            </div>
+                            <div class="analysis-content">
+                                <div class="analysis-score" id="legalScore">90점</div>
+                                <div class="analysis-description">등기부등본 정상</div>
+                            </div>
+                        </div>
+                        <div class="analysis-item financial">
+                            <div class="analysis-header">
+                                <div class="analysis-icon">💰</div>
+                                <div class="analysis-category">금융 안전성</div>
+                            </div>
+                            <div class="analysis-content">
+                                <div class="analysis-score" id="financialScore">85점</div>
+                                <div class="analysis-description">대출 승인 가능</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 안전 진단 섹션 -->
+            <div class="section-content" id="safety-section">
+                <!-- 최종 검토 결과 타이틀 -->
+                <div class="final-review-title">
+                    <div class="title-content">
+                        <h2 class="title-text">꼼꼼하게 확인했어요!</h2>
+                        <p class="title-subtitle">문제없음 - 안전한 거래 가능</p>
+                    </div>
+                </div>
+
+                <!-- 구분선 -->
+                <div class="section-divider"></div>
+
+                <!-- 등기부등본 관련 정보 카드 -->
+                <div class="status-card safe collapsible" id="registry-card">
+                    <div class="status-header-with-button" onclick="toggleCard('registry-card')">
+                        <div class="status-info">
+                            <div class="status-icon safe">📋</div>
+                            <div>
+                                <h3 class="status-title">등기부등본</h3>
+                                <p class="status-description">소유권 및 권리 관계 확인</p>
+                            </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge safe">이상없음</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="verification-grid collapsible-content" style="display: none;">
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">소유권 이전</div>
+                                <div class="verification-status no-risk">문제없음</div>
+                        </div>
+                    </div>
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">근저당권</div>
+                                <div class="verification-status no-risk">문제없음</div>
+                        </div>
+                    </div>
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">전세권</div>
+                                <div class="verification-status no-risk">문제없음</div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+                <!-- 건축물대장 정보 카드 -->
+                <div class="status-card safe collapsible" id="building-card">
+                    <div class="status-header-with-button" onclick="toggleCard('building-card')">
+                        <div class="status-info">
+                            <div class="status-icon safe">🏠</div>
+                            <div>
+                                <h3 class="status-title">건축물대장</h3>
+                                <p class="status-description">건물 상태 및 용도 확인</p>
+                            </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge safe">이상없음</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="verification-grid collapsible-content" style="display: none;">
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">건물 정보</div>
+                                <div class="verification-status no-risk">정상</div>
+                        </div>
+                    </div>
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">용도 위반</div>
+                                <div class="verification-status no-risk">없음</div>
+                        </div>
+                    </div>
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">불법 증축</div>
+                                <div class="verification-status no-risk">없음</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 토지대장 정보 카드 -->
+                <div class="status-card safe collapsible" id="land-card">
+                    <div class="status-header-with-button" onclick="toggleCard('land-card')">
+                        <div class="status-info">
+                            <div class="status-icon safe">🌍</div>
+                            <div>
+                                <h3 class="status-title">토지대장</h3>
+                                <p class="status-description">토지 상태 및 면적 확인</p>
+                            </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge safe">이상없음</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="verification-grid collapsible-content" style="display: none;">
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">토지 정보</div>
+                                <div class="verification-status no-risk">정상</div>
+                            </div>
+                        </div>
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">지목 변경</div>
+                                <div class="verification-status no-risk">없음</div>
+                            </div>
+                        </div>
+                        <div class="verification-item no-risk">
+                            <div class="verification-icon no-risk">OK</div>
+                            <div class="verification-content">
+                                <div class="verification-name">면적 확인</div>
+                                <div class="verification-status no-risk">일치</div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            </div>
+
+            <!-- 보증보험 및 임대대출 섹션 -->
+            <div class="section-content" id="insurance-section">
+                <!-- 보험 가입 가능성 상태 카드 -->
+                <div class="status-card safe" id="insurance-card">
+                    <div class="status-header-with-button">
+                        <div class="status-info">
+                            <div class="status-icon safe">🛡️</div>
+                            <div>
+                                <h3 class="status-title">보험 가입</h3>
+                                <p class="status-description">안전하게 보호받을 수 있어요</p>
+                            </div>
+                        </div>
+                        <div></div>
+                        </div>
+                    
+                    <div class="collapsible-content-expanded" style="display: block;">
+                        <div class="insurance-loan-section">
+                            <div class="section-header">
+                                <h4 class="section-title">임대차보증금 반환보증보험</h4>
+                                </div>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">가입 가능 여부</div>
+                                    <div class="info-value success" id="insuranceAvailable">가입 가능</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">월 보험료</div>
+                                    <div class="info-value" id="insurancePremium">3만원</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">보장 한도</div>
+                                    <div class="info-value" id="insuranceLimit">최대 3억원</div>
+                            </div>
+                                <div class="info-item">
+                                    <div class="info-label">추천 보험사</div>
+                                    <div class="info-value" id="recommendedInsurance">DB손해보험, 현대해상</div>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="insurance-loan-section">
+                            <div class="section-header">
+                                <h4 class="section-title">전세대출</h4>
+                            </div>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">대출 가능 여부</div>
+                                    <div class="info-value success" id="loanAvailable">대출 가능</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">HUG 안심 대출 추천</div>
+                                    <div class="info-value success" id="loanHUG">적극 추천</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">대출 한도</div>
+                                    <div class="info-value" id="loanLimit">2.4억원</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">대출 비율</div>
+                                    <div class="info-value">보증금의 80%</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">추천 은행</div>
+                                    <div class="info-value" id="recommendedBank">국민은행, 신한은행</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="final-comment-section">
+                            <h4 class="final-comment-title">최종 진단 코멘트</h4>
+                            <p class="final-comment-desc" id="insuranceConclusion">
+                                본 부동산은 전세보증보험 가입 및 전세대출 실행 조건이 모두 충족되는 매우 안전한 상태입니다.
+                                특히 HUG 안심 대출 추천 요건을 갖추었으므로, 신속한 계약 진행을 권장합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 시나리오 섹션 -->
+            <div class="section-content" id="scenario-section">
+                <!-- 경매 시나리오 -->
+                <div class="status-card danger collapsible" id="scenario-auction-card" style="display: none;" data-scenario="auction">
+                    <div class="status-header-with-button" onclick="toggleCard('scenario-auction-card')">
+                        <div class="status-info">
+                            <div class="status-icon danger">경매</div>
+                        <div>
+                                <h3 class="status-title">경매 상황</h3>
+                                <p class="status-description">경매 발생 시 예상되는 상황과 손실 분석</p>
+                        </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge danger">고위험</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapsible-content" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- 전세사기 유형별 분석 -->
+                <div class="status-card danger collapsible" id="scenario-fraud-card" style="display: none;" data-scenario="fraud">
+                    <div class="status-header-with-button" onclick="toggleCard('scenario-fraud-card')">
+                        <div class="status-info">
+                            <div class="status-icon danger">🚨</div>
+                            <div>
+                                <h3 class="status-title">전세사기 종류</h3>
+                                <p class="status-description">다양한 전세사기 유형과 예방법을 확인하세요</p>
+                            </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge danger">주의필요</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapsible-content" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- 현재 상황 시나리오들 -->
+                <div class="status-card safe collapsible" id="scenario-contact-card" style="display: none;" data-scenario="contact">
+                    <div class="status-header-with-button" onclick="toggleCard('scenario-contact-card')">
+                        <div class="status-info">
+                            <div class="status-icon safe">📞</div>
+                            <div>
+                                <h3 class="status-title">집주인 연락 두절</h3>
+                                <p class="status-description">갑자기 연락이 안 될 때</p>
+                        </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge safe">이상없음</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                    </div>
+                </div>
+
+                <div class="status-card warning collapsible" id="scenario-price-card" style="display: none;" data-scenario="price">
+                    <div class="status-header-with-button" onclick="toggleCard('scenario-price-card')">
+                        <div class="status-info">
+                            <div class="status-icon warning">💡</div>
+                        <div>
+                                <h3 class="status-title">저렴한 매물</h3>
+                                <p class="status-description">너무 싸게 나온 집일 때</p>
+                        </div>
+                    </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge warning">가격주의</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapsible-content" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="status-card danger collapsible" id="scenario-contract-card" style="display: none;" data-scenario="contract">
+                    <div class="status-header-with-button" onclick="toggleCard('scenario-contract-card')">
+                        <div class="status-info">
+                            <div class="status-icon danger">상황</div>
+                            <div>
+                                <h3 class="status-title">계약서 이상 조항</h3>
+                                <p class="status-description">이상한 조건이 있을 때</p>
+                            </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge danger">법적위험</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapsible-content" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="status-card safe collapsible" id="scenario-credit-card" style="display: none;" data-scenario="credit">
+                    <div class="status-header-with-button" onclick="toggleCard('scenario-credit-card')">
+                        <div class="status-info">
+                            <div class="status-icon safe">💳</div>
+                            <div>
+                                <h3 class="status-title">집주인 신용도</h3>
+                                <p class="status-description">집주인 재정상태가 불안할 때</p>
+                            </div>
+                        </div>
+                        <div class="card-status-indicator">
+                            <span class="status-badge safe">이상없음</span>
+                            <button class="collapse-button" type="button">
+                                <span class="collapse-icon">▼</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="report-footer">
+            <div class="footer-logo">보증지킴이</div>
+            <div class="footer-info">
+                안전한 부동산 거래를 위한 전문 서비스<br>
+                이메일: bojangjikimi@gmail.com
+            </div>
+        </div>
+    </div>
+
+    <!-- 하단 고정 CTA 버튼 바 -->
+    <div class="bottom-cta-bar">
+        <div class="cta-buttons">
+            <button class="cta-button active" onclick="showSection('basic')">기본정보</button>
+            <button class="cta-button" onclick="showSection('safety')">안전진단</button>
+            <button class="cta-button" onclick="showSection('insurance')">보험대출</button>
+            <button class="cta-button" onclick="showSection('scenario')">시나리오</button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * ========================================
+         * 전세사기 정보 상세 데이터
+         * ========================================
+         */
+        const fraudData = {
+            'kkangtong': {
+                title: '깡통전세 및 무자본 갭투자',
+                summary: '전세보증금이 매매가를 초과하여 계약 만료 시 보증금 회수가 불가능한 계약입니다. 건축주가 보증금으로 매매 잔금을 치르고, 실제 임대인은 \'바지 임대인\'에게 소유권을 이전하는 구조적 사기입니다.',
+                methods: [
+                    '시세 정보가 불분명한 신축 빌라를 표적으로 삼음',
+                    '건축주와 결탁하여 매매가와 비슷한 수준으로 전세보증금 책정',
+                    '보증금으로 주택 매매 잔금을 치르고, \'바지 임대인\'에게 소유권 이전',
+                    '임대인은 실제로는 소유권이 없는 상태에서 전세 계약 체결',
+                    '계약 만료 시 보증금 회수가 불가능한 구조적 사기'
+                ],
+                prevention: [
+                    '안심전세앱/실거래가 사이트를 통한 정확한 시세 확인',
+                    '전세가율 80% 이하인 주택 계약',
+                    'HUG 보증보험 가입 가능 여부 사전 확인',
+                    '임대인의 부동산 등기부등본 확인',
+                    '신축 빌라의 경우 건축주와 임대인이 다른지 확인'
+                ]
+            },
+            'fakeLandlord': {
+                title: '가짜 임대인 및 무권한 대리 계약',
+                summary: '실제 소유자가 아닌 사람이 임대인을 사칭하거나, 대리인 자격이 없는 사람이 계약을 체결하는 사기입니다. 계약 자체가 무효가 되어 보증금 회수가 어려워집니다.',
+                methods: [
+                    '실제 소유자가 아닌 사람이 임대인을 사칭',
+                    '대리인 자격이 없는 사람이 계약 체결',
+                    '위조된 위임장이나 대리인 자격 증명서 사용',
+                    '소유권 이전 과정에서 발생하는 권리 공백기 이용',
+                    '계약서에 실제 소유자와 다른 이름으로 서명'
+                ],
+                prevention: [
+                    '부동산 등기부등본을 통한 실제 소유자 확인',
+                    '임대인의 신분증과 등기부등본의 성명 일치 여부 확인',
+                    '대리 계약 시 위임장의 유효성 검증',
+                    '공인중개사를 통한 계약 체결',
+                    '계약 전 임대인과의 직접 대면 확인'
+                ]
+            },
+            'doubleContract': {
+                title: '이중 계약 및 권리 분쟁',
+                summary: '동일한 부동산에 대해 여러 명의 임차인과 계약을 체결하거나, 이미 다른 사람과 계약이 체결된 상태에서 추가 계약을 맺는 사기입니다.',
+                methods: [
+                    '동일한 부동산에 여러 명의 임차인과 계약 체결',
+                    '이미 계약된 상태에서 추가 계약 체결',
+                    '계약서 날짜를 조작하여 선후 관계 모호화',
+                    '임차인들 간의 정보 차단으로 이중 계약 은폐',
+                    '실제 입주 가능한 사람은 한 명뿐인 상황 조성'
+                ],
+                prevention: [
+                    '부동산 등기부등본의 전세권 설정 여부 확인',
+                    '공인중개사를 통한 계약 체결',
+                    '계약 전 해당 부동산의 입주 가능 여부 확인',
+                    '임대인과의 직접적인 소통 채널 확보',
+                    '계약서 작성 시 정확한 날짜와 시간 기록'
+                ]
+            },
+            'fakeDocument': {
+                title: '위조 서류 및 허위 정보 제공',
+                summary: '부동산 관련 서류를 위조하거나 허위 정보를 제공하여 계약을 유도하는 사기입니다. 등기부등본, 건축물대장, 임대차계약서 등을 위조합니다.',
+                methods: [
+                    '부동산 등기부등본 위조',
+                    '건축물대장 및 관련 허가서류 위조',
+                    '임대차계약서의 중요 조항 위조',
+                    '소유권 증명서류 위조',
+                    '허위의 부동산 정보 제공'
+                ],
+                prevention: [
+                    '정부24, 부동산등기부등본 열람 서비스 이용',
+                    '공인중개사를 통한 서류 검증',
+                    '여러 채널을 통한 정보 교차 확인',
+                    '계약 전 모든 서류의 원본 확인',
+                    '의심스러운 서류 발견 시 계약 중단'
+                ]
+            },
+            'depositFraud': {
+                title: '보증금 사취 및 도피',
+                summary: '보증금을 받은 후 계약을 이행하지 않고 도피하거나, 보증금을 다른 용도로 사용하여 반환하지 않는 사기입니다.',
+                methods: [
+                    '보증금 수령 후 계약 이행 거부',
+                    '보증금을 다른 부동산 매입 자금으로 사용',
+                    '계약 기간 중 갑작스러운 연락 두절',
+                    '보증금 반환 약속 후 계속적인 지연',
+                    '법적 절차를 통한 보증금 회수 방해'
+                ],
+                prevention: [
+                    'HUG 보증보험 가입 필수',
+                    '보증금을 직접 전달하지 말고 공인중개사 경유',
+                    '계약 전 임대인의 신용도 조회',
+                    '보증금 반환 조건을 계약서에 명시',
+                    '정기적인 임대인과의 소통 유지'
+                ]
+            },
+            'evictionFraud': {
+                title: '강제 퇴거 및 불법 해지',
+                summary: '계약 기간 중 임대인의 일방적인 계약 해지나 강제 퇴거를 시도하는 사기입니다. 법적 근거 없이 임차인을 내쫓으려 합니다.',
+                methods: [
+                    '계약 기간 중 일방적인 계약 해지 통보',
+                    '법적 근거 없는 강제 퇴거 시도',
+                    '임차인의 정상적인 거주를 방해하는 행위',
+                    '계약서에 불리한 조항을 이용한 해지',
+                    '임차인을 협박하여 자발적 퇴거 유도'
+                ],
+                prevention: [
+                    '계약서의 해지 조건을 명확히 확인',
+                    '임차인의 권리에 대한 법적 지식 습득',
+                    '퇴거 요구 시 법적 근거 요구',
+                    '공인중개사나 법무법인 상담',
+                    '모든 소통 내용을 기록으로 남기기'
+                ]
+            }
+        };
+
+        /**
+         * ========================================
+         * 부동산 안전성 검증 보고서 데이터 설정 함수
+         * ========================================
+         * 
+         * 이 함수는 보고서에 표시될 모든 데이터를 설정하고, 
+         * 동시에 브라우저의 localStorage에 저장하여 다음에 페이지를 열 때도 
+         * 동일한 데이터가 자동으로 로드되도록 합니다.
+         * 
+         * 사용법:
+         * setReportData({
+         *     customerName: "홍길동",
+         *     propertyAddress: "서울시 강남구 테헤란로 123",
+         *     depositAmount: "2억원",
+         *     totalScore: 88
+         * });
+         * 
+         * @param {Object} data - 보고서에 표시할 데이터 객체
+         * @param {string} data.customerName - 고객 이름 (예: "김철수")
+         * @param {string} data.requestedAnalysis - 요청한 분석 유형 (예: "집주인 재정상태 + 법적 위험성")
+         * @param {string} data.contractSituation - 계약 상황 (예: "계약은 했는데 아직 이사 전이에요")
+         * @param {string} data.additionalInfo - 거주 상태/추가 정보 (예: "계약하고 싶은 집이 있어요")
+         * @param {string} data.contractPeriod - 계약 기간 (예: "2년")
+         * @param {string} data.propertyAddress - 부동산 주소 (예: "서울시 강남구 역삼동 123-45")
+         * @param {string} data.depositType - 보증금 유형 (예: "전세", "월세", "반전세")
+         * @param {string} data.detailType - 상세 유형 (예: "일반임대", "전세대출")
+         * @param {string} data.depositAmount - 보증금 금액 (예: "3억원", "1억 5천만원")
+         * @param {string} data.monthlyRent - 월세 금액 (월세/반전세인 경우, 예: "50만원", "-")
+         * @param {string} data.detailStatus - 상세 상태 (예: "가계약금만 지급한 상황이예요")
+         * @param {number} data.totalScore - 종합 점수 (0-100 사이의 숫자, 예: 85)
+         * @param {string} data.scoreLabel - 점수 라벨 (예: "양호", "우수", "주의", "위험")
+         * @param {string} data.scoreDescription - 점수 설명 (예: "전반적으로 안전한 거래가 가능한 수준입니다")
+         * @param {number} data.legalScore - 법적 안전성 점수 (0-100, 예: 90)
+         * @param {number} data.financialScore - 금융 안전성 점수 (0-100, 예: 85)
+         * @param {Array<string>} data.cautions - 주의사항 배열 (예: ["건물 노후도가 높습니다", "교통 혼잡 예상"])
+         * @param {Array<string>} data.improvements - 개선 제안 배열 (예: ["등기부등본 확인하세요", "보험 가입 권장"])
+         * @param {string} data.conclusion - 결론 (선택사항)
+         */
+        function setReportData(data) {
+            try {
+                // 기본 데이터 설정 (모든 필수 필드에 대한 기본값 제공)
+            const defaultData = {
+                customerName: '김철수',
+                requestedAnalysis: '집주인 재정상태 + 법적 위험성',
+                contractSituation: '계약은 했는데 아직 이사 전이에요',
+                additionalInfo: '계약하고 싶은 집이 있어요',
+                contractPeriod: '2년',
+                propertyAddress: '서울시 강남구 역삼동 123-45',
+                    depositType: '전세',
+                    detailType: '일반임대',
+                depositAmount: '3억원',
+                    monthlyRent: '-',
+                detailStatus: '가계약금만 지급한 상황이예요',
+                totalScore: 85,
+                scoreLabel: '양호',
+                scoreDescription: '해당 부동산은 전반적으로 안전한 거래가 가능한 수준입니다. 일부 주의사항이 있으나 큰 문제는 없습니다.',
+                legalScore: 90,
+                financialScore: 85,
+                loanHUG: '적극 추천',
+                insuranceConclusion: '본 부동산은 전세보증보험 가입 및 전세대출 실행 조건이 모두 충족되는 매우 안전한 상태입니다. 특히 HUG 안심 대출 추천 요건을 갖추었으므로, 신속한 계약 진행을 권장합니다.',
+                scenarioAuction: true,
+                scenarioFraud: true,
+                scenarioContact: true,
+                scenarioPrice: true,
+                scenarioContract: true,
+                scenarioCredit: true,
+                cautions: [
+                    '건물 노후도가 높아 리모델링이 필요할 수 있습니다.',
+                    '주변 상업시설 증가로 교통 혼잡이 예상됩니다.',
+                    '관리비 인상 가능성을 고려해야 합니다.'
+                ],
+                improvements: [
+                    '계약 전 부동산 등기부등본을 반드시 확인하세요.',
+                    '보증금 지급 전 중도금 계약을 체결하는 것을 권장합니다.',
+                    '임대차보증금 반환보증보험 가입을 검토해보세요.'
+                ],
+                conclusion: '본 부동산은 전반적으로 안전한 거래가 가능한 수준으로 평가됩니다. 법적 안전성과 금융 안전성이 우수하며, 지역적 접근성도 양호합니다. 다만 건물 노후도와 관련된 주의사항을 고려하여 신중한 의사결정을 하시기 바랍니다. 보증지킴이는 지속적으로 부동산 시장의 변화를 모니터링하여 더욱 정확한 정보를 제공하겠습니다.',
+                // 💡 추가: fraudDetailsChecked 빈 배열로 초기화
+                fraudDetailsChecked: []
+            };
+
+                // 전달받은 데이터와 기본 데이터 병합 (전달받은 데이터가 우선)
+            const reportData = { ...defaultData, ...data };
+
+                // ========================================
+                // 1. HTML 요소에 데이터 적용 (화면 업데이트)
+                // ========================================
+
+            // 고객 정보 업데이트
+                const customerTitle = document.querySelector('.customer-title');
+                if (customerTitle) {
+                    customerTitle.innerHTML = `<span class="customer-name">${reportData.customerName}님</span>을 위한 맞춤 리포트`;
+                }
+
+                // 고객 상세 정보 업데이트
+                updateElementById('requestedAnalysis', reportData.requestedAnalysis);
+                updateElementById('contractSituation', reportData.contractSituation);
+                updateElementById('additionalInfo', reportData.additionalInfo || '-');
+                updateElementById('contractPeriod', reportData.contractPeriod);
+
+                // 부동산 정보 업데이트
+                updateElementById('propertyAddress', reportData.propertyAddress);
+                updateElementById('depositType', reportData.depositType);
+                updateElementById('detailType', reportData.detailType);
+                updateElementById('depositAmount', reportData.depositAmount);
+                updateElementById('monthlyRent', reportData.monthlyRent || '-');
+                updateElementById('residenceStatus', reportData.additionalInfo);
+
+                // 점수 정보 업데이트
+                // 법적 안전성과 금융 안전성 점수의 평균으로 종합 점수 계산
+                const averageScore = Math.round(((reportData.legalScore + reportData.financialScore) / 2) * 10) / 10;
+                updateElementById('overallScore', averageScore);
+                updateElementById('overallStatus', reportData.scoreLabel);
+                updateElementById('overallDescription', reportData.scoreDescription);
+                updateElementById('legalScore', reportData.legalScore + '점');
+                updateElementById('financialScore', reportData.financialScore + '점');
+
+                // 💡 HUG 추천 여부와 최종 코멘트 업데이트
+                updateElementById('loanHUG', reportData.loanHUG);
+                updateElementById('insuranceConclusion', reportData.insuranceConclusion);
+
+                // 점수에 따른 색상 및 스타일 조정
+                updateScoreColors(averageScore);
+                updateAnalysisScoreColors();
+
+                // 시나리오 카드 표시/숨김 처리
+                updateScenarioVisibility(reportData);
+
+                // ========================================
+                // 2. localStorage에 데이터 저장 (영구 저장)
+                // ========================================
+                localStorage.setItem('reportData', JSON.stringify(reportData));
+                
+                // 성공 메시지 (개발자용)
+                console.log('✅ 보고서 데이터가 성공적으로 업데이트되고 저장되었습니다.');
+                console.log('📊 저장된 데이터:', reportData);
+
+            } catch (error) {
+                // 오류 발생 시 사용자에게 알림
+                console.error('❌ 보고서 데이터 설정 중 오류가 발생했습니다:', error);
+                alert('보고서 데이터를 설정하는 중 오류가 발생했습니다. 페이지를 새로고침하고 다시 시도해주세요.');
+            }
+        }
+
+        /**
+         * ========================================
+         * HTML 요소 업데이트 헬퍼 함수
+         * ========================================
+         * 
+         * 특정 ID를 가진 HTML 요소의 텍스트 내용을 안전하게 업데이트합니다.
+         * 요소가 존재하지 않아도 오류가 발생하지 않도록 처리합니다.
+         * 
+         * @param {string} elementId - 업데이트할 HTML 요소의 ID
+         * @param {string|number} value - 설정할 값
+         */
+        function updateElementById(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value;
+            } else {
+                console.warn(`⚠️ ID가 '${elementId}'인 요소를 찾을 수 없습니다.`);
+            }
+        }
+
+        /**
+         * ========================================
+         * localStorage에서 데이터 불러오기 함수
+         * ========================================
+         * 
+         * 브라우저의 localStorage에서 이전에 저장된 보고서 데이터를 안전하게 불러옵니다.
+         * 데이터가 없거나 손상된 경우 기본값을 사용합니다.
+         * 
+         * @returns {Object} 불러온 데이터 또는 기본 데이터
+         */
+        function loadReportDataFromStorage() {
+            try {
+                const savedData = localStorage.getItem('reportData');
+                if (savedData) {
+                    const parsedData = JSON.parse(savedData);
+                    console.log('📂 저장된 보고서 데이터를 불러왔습니다:', parsedData);
+                    return parsedData;
+                } else {
+                    console.log('📂 저장된 데이터가 없습니다. 기본 데이터를 사용합니다.');
+                    return {};
+                }
+            } catch (error) {
+                console.error('❌ 저장된 데이터를 불러오는 중 오류가 발생했습니다:', error);
+                console.log('📂 기본 데이터를 사용합니다.');
+                return {};
+            }
+        }
+
+        // 점수에 따른 색상 업데이트
+        function updateScoreColors(score) {
+            const rangeMarker = document.querySelector('.range-marker');
+            const statusBadge = document.getElementById('overallStatus');
+            const scoreCircle = document.querySelector('.score-circle');
+            
+            // range-marker 위치 업데이트
+            if (rangeMarker) {
+                rangeMarker.style.left = score + '%';
+            }
+            
+            // score-circle 색상 업데이트 (range-labels 색상과 동일)
+            if (scoreCircle) {
+                if (score >= 81) {
+                    // 안전 (81-100): #10b981
+                    scoreCircle.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                } else if (score >= 61) {
+                    // 보통 (61-80): #eab308
+                    scoreCircle.style.background = 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)';
+                } else if (score >= 31) {
+                    // 주의 (31-60): #f59e0b
+                    scoreCircle.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+                } else {
+                    // 위험 (0-30): #dc2626
+                    scoreCircle.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
+                }
+            }
+            
+            // status-badge 클래스 및 텍스트  업데이트 (range-labels 색상과 동일)
+            if (statusBadge) {
+                // 기존 클래스 제거
+                statusBadge.classList.remove('safe', 'warning', 'danger');
+                
+                if (score >= 81) {
+                    // 안전 (81-100): #10b981
+                    statusBadge.classList.add('safe');
+                    statusBadge.textContent = '안전';
+                } else if (score >= 61) {
+                    // 보통 (61-80): #eab308
+                    statusBadge.classList.add('warning');
+                    statusBadge.textContent = '보통';
+                } else if (score >= 31) {
+                    // 주의 (31-60): #f59e0b
+                    statusBadge.classList.add('warning');
+                    statusBadge.textContent = '주의';
+                } else {
+                    // 위험 (0-30): #dc2626
+                    statusBadge.classList.add('danger');
+                    statusBadge.textContent = '위험';
+                }
+            }
+        }
+
+        // 개별 점수에 따른 색상 업데이트
+        function updateAnalysisScoreColors() {
+            const analysisScores = document.querySelectorAll('.analysis-score');
+            
+            analysisScores.forEach(scoreElement => {
+                const scoreText = scoreElement.textContent;
+                const score = parseInt(scoreText.replace('점', ''));
+                
+                if (!isNaN(score)) {
+                    // 기존 클래스 제거
+                    scoreElement.classList.remove('score-safe', 'score-warning', 'score-danger');
+                    
+                    if (score >= 80) {
+                        // 안전 (80-100): #10b981
+                        scoreElement.classList.add('score-safe');
+                    } else if (score >= 60) {
+                        // 보통 (60-79): #eab308
+                        scoreElement.classList.add('score-warning');
+                    } else {
+                        // 위험 (0-59): #dc2626
+                        scoreElement.classList.add('score-danger');
+                    }
+                }
+            });
+        }
+
+        // 시나리오 카드 표시/숨김 처리
+        function updateScenarioVisibility(reportData) {
+            const scenarioCards = {
+                'scenarioAuction': 'scenario-auction-card',
+                'scenarioFraud': 'scenario-fraud-card',
+                'scenarioContact': 'scenario-contact-card',
+                'scenarioPrice': 'scenario-price-card',
+                'scenarioContract': 'scenario-contract-card',
+                'scenarioCredit': 'scenario-credit-card'
+            };
+
+            Object.keys(scenarioCards).forEach(scenarioKey => {
+                const cardElement = document.getElementById(scenarioCards[scenarioKey]);
+                if (cardElement) {
+                    if (reportData[scenarioKey]) {
+                        cardElement.style.display = 'block';
+                    } else {
+                        cardElement.style.display = 'none';
+                    }
+                }
+            });
+        }
+        // 섹션 전환 함수
+        function showSection(sectionId) {
+            // 모든 섹션 숨기기
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 모든 버튼 비활성화
+            document.querySelectorAll('.cta-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // 기본정보 섹션일 때 고객 정보 섹션도 함께 표시
+            if (sectionId === 'basic') {
+                const customerSection = document.getElementById('customer-section');
+                if (customerSection) {
+                    customerSection.classList.add('active');
+                }
+            }
+            
+            // 선택된 섹션 표시
+            const targetSection = document.getElementById(sectionId + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // 선택된 버튼 활성화
+            const targetButton = event.target;
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+        }
+
+        // 카드 접기/펼치기 함수
+        function toggleCard(cardId) {
+            const card = document.getElementById(cardId);
+            const content = card.querySelector('.collapsible-content');
+            const collapseIcon = card.querySelector('.collapse-icon');
+            
+            const scenarioType = card.getAttribute('data-scenario');
+            
+            if (content.style.display === 'none' || content.style.display === '') {
+                // 펼치기
+                content.style.display = 'block';
+                collapseIcon.textContent = '▲';
+                
+                // 💡 수정: 상세 푸터를 여는 대신, 인라인으로 내용을 렌더링
+                if (scenarioType) {
+                    renderScenarioContent(scenarioType, content);
+                }
+            } else {
+                // 접기
+                content.style.display = 'none';
+                collapseIcon.textContent = '▼';
+            }
+        }
+
+        // 시나리오 내용 인라인 렌더링 함수
+        function renderScenarioContent(type, targetElement) {
+            let htmlContent = '';
+            let title = '';
+            
+            if (type === 'contact') {
+                title = '집주인 연락 두절';
+                htmlContent = `
+                    <div class="scenario-analysis" style="margin-top: 0.5rem;">
+                        <div class="analysis-item">
+                            <div class="analysis-title">연락 두절 원인 분석</div>
+                            <div class="analysis-desc">집주인이 갑자기 연락이 안 되는 경우, 여러 가지 원인이 있을 수 있습니다.</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">가능한 위험 상황</div>
+                            <div class="analysis-desc">• 부채 문제로 도피 중<br>• 다른 임차인과 분쟁 중<br>• 부동산 중복 매도 시도</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">대응 방안</div>
+                            <div class="analysis-desc">• 등기부등본 확인으로 소유권 상태 점검<br>• 부동산 중개업소를 통한 확인<br>• 법적 조치 준비</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'credit') {
+                title = '집주인 신용도 문제';
+                htmlContent = `
+                    <div class="scenario-analysis" style="margin-top: 0.5rem;">
+                        <div class="analysis-item">
+                            <div class="analysis-title">집주인 재정 상태 분석</div>
+                            <div class="analysis-desc">집주인의 부채 현황과 신용도를 종합적으로 분석합니다.</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">위험 신호</div>
+                            <div class="analysis-desc">• 다중 부채로 인한 압류 위험<br>• 신용불량자 등록<br>• 다른 부동산 경매 진행 중</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">보호 방안</div>
+                            <div class="analysis-desc">• 임대차보증금 반환보증보험 가입<br>• 등기부등본 정기 확인<br>• 대항력 확보를 위한 실제 거주</div>
+                        </div>
+                    </div>
+                `;
+            }
+            // 💡 추가: 경매 상황 시나리오 렌더링
+            else if (type === 'auction') {
+                title = '경매 상황 상세 분석';
+                htmlContent = `
+                    <div class="scenario-analysis" style="margin-top: 0.5rem;">
+                        <div class="analysis-item">
+                            <div class="analysis-title">낙찰가 예측</div>
+                            <div class="analysis-desc">경매 시 낙찰가를 예측하여 보증금 회수 가능성을 진단합니다.</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">선순위 채권 확인</div>
+                            <div class="analysis-desc">임차인보다 우선순위가 높은 근저당권, 압류 등의 금액을 계산합니다.</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">예상 손실액</div>
+                            <div class="analysis-desc">경매가와 선순위 채권을 바탕으로 예상되는 보증금 손실액을 계산합니다.</div>
+                        </div>
+                    </div>
+                `;
+            }
+            // 💡 추가: 전세사기 유형 시나리오 렌더링
+            else if (type === 'fraud') {
+                title = '전세사기 유형별 위험성';
+                htmlContent = `
+                    <div class="fraud-detail-content" style="padding: 0;">
+                        <div class="fraud-summary">
+                            <p class="summary-text">
+                                현재 계약 상황에서 발생할 수 있는 주요 전세사기 유형을 상세히 분석합니다.
+                                특히 **깡통전세**, **이중계약**, **가짜 임대인** 사기에 대한 위험도가 높습니다.
+                            </p>
+                        </div>
+                        <div class="fraud-prevention">
+                            <div class="detail-subtitle" style="color: #dc2626;">필수 예방 조치</div>
+                            <ul class="prevention-list" style="margin-left: 20px;">
+                                <li class="prevention-item">HUG 보증보험 가입 요건을 반드시 확인하세요.</li>
+                                <li class="prevention-item">잔금 지급 직전, 집주인과 함께 등기부등본 재확인이 필수입니다.</li>
+                                <li class="prevention-item">집주인 신분증, 위임장, 인감증명서 원본을 모두 확인하세요.</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+            // 💡 추가: 저렴한 매물 시나리오 렌더링
+            else if (type === 'price') {
+                title = '저렴한 매물 가격 위험성';
+                htmlContent = `
+                    <div class="scenario-analysis" style="margin-top: 0.5rem;">
+                        <div class="analysis-item">
+                            <div class="analysis-title">시세 대비 분석</div>
+                            <div class="analysis-desc">주변 유사 매물 대비 가격이 10% 이상 저렴할 경우, 매매가 대비 전세가율이 높을 가능성이 있습니다.</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">잠재적 위험</div>
+                            <div class="analysis-desc">• 급매로 위장한 깡통전세일 가능성<br>• 건물 노후도나 법적 하자가 있을 가능성</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">대응 방안</div>
+                            <div class="analysis-desc">• 해당 지역 공인중개사 여러 곳에 시세 재확인<br>• 등기부등본과 건축물대장상 하자 여부 집중 검토</div>
+                        </div>
+                    </div>
+                `;
+            }
+            // 💡 추가: 계약서 이상 조항 시나리오 렌더링
+            else if (type === 'contract') {
+                title = '계약서 이상 조항 법적 검토';
+                htmlContent = `
+                    <div class="scenario-analysis" style="margin-top: 0.5rem;">
+                        <div class="analysis-item">
+                            <div class="analysis-title">주요 위험 조항</div>
+                            <div class="analysis-desc">임차인에게 불리한 '임대인의 책임 면제', '묵시적 갱신 배제' 등의 조항이 있는지 검토합니다.</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">위험 대응</div>
+                            <div class="analysis-desc">• 계약 전 해당 조항 삭제 또는 수정 요구<br>• 불리한 조항은 법적 효력이 없을 수 있으나, 분쟁 소지 있음</div>
+                        </div>
+                        <div class="analysis-item">
+                            <div class="analysis-title">전문가 추천</div>
+                            <div class="analysis-desc">• 계약서에 법무사 또는 변호사의 검토를 받는 것을 권장합니다.</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 컨텐츠 삽입
+            targetElement.innerHTML = `<h4 class="detail-section-title" style="margin-bottom: 1rem;">${title}</h4>` + htmlContent;
+        }
+
+        /**
+         * ========================================
+         * 페이지 로드 시 자동 데이터 로드
+         * ========================================
+         * 
+         * 페이지가 로드될 때 localStorage에 저장된 이전 데이터를 자동으로 불러와서
+         * 보고서에 적용합니다. 저장된 데이터가 없으면 기본 데이터를 사용합니다.
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 보고서 페이지가 로드되었습니다.');
+            
+            // localStorage에서 저장된 데이터 불러오기
+            const savedData = loadReportDataFromStorage();
+            
+            // 불러온 데이터로 보고서 설정 (저장된 데이터가 있으면 사용, 없으면 기본값 사용)
+            setReportData(savedData);
+        });
+    </script>
+</body>
+</html>
