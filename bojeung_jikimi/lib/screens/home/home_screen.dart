@@ -1,12 +1,30 @@
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
+import '../../models/column_data.dart';
+import '../../models/tip_model.dart';
+import '../../services/firestore_service.dart';
 import 'column_detail_screen.dart';
+import 'checklist_screen.dart';
+import 'news_screen.dart';
 
 // 홈 화면 (안심 대시보드)
 class HomeScreen extends StatelessWidget {
   final VoidCallback? onNavigateToDiagnosis;
 
   const HomeScreen({super.key, this.onNavigateToDiagnosis});
+
+  // 재사용 가능한 스타일 상수
+  static const double _horizontalPadding = 24.0;
+  static const double _cardBorderRadius = 16.0;
+
+  // 공통 그림자 효과
+  static List<BoxShadow> get _cardShadow => [
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.04),
+      blurRadius: 10,
+      offset: const Offset(0, 2),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +41,25 @@ class HomeScreen extends StatelessWidget {
             // 메인 액션 카드 (3초 진단하기)
             _buildMainActionCard(),
 
+            const SizedBox(height: 24),
+
+            // 1. 계약 준비 체크리스트 카드
+            _buildChecklistSummary(context),
+
+            const SizedBox(height: 16),
+
+            // 2. 부동산 뉴스/팁 카드
+            _buildNewsTicker(context),
+
             const SizedBox(height: 32),
 
-            // 전문가 법률 칼럼 리스트
+            // 3. 전문가 법률 인사이트
             _buildLegalColumnList(context),
+
+            const SizedBox(height: 32),
+
+            // 4. 전세 안전 꿀팁 (Firestore 연동)
+            _buildFirestoreTipsSection(context),
 
             const SizedBox(height: 24),
           ],
@@ -38,7 +71,12 @@ class HomeScreen extends StatelessWidget {
   // 상단 헤더
   Widget _buildWelcomeHeader() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+      padding: const EdgeInsets.fromLTRB(
+        _horizontalPadding,
+        24,
+        _horizontalPadding,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,10 +91,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             '오늘도 안전한 집을 찾아볼까요?',
-            style: TextStyle(
-              fontSize: 16,
-              color: AppColors.textLight,
-            ),
+            style: TextStyle(fontSize: 16, color: AppColors.textLight),
           ),
         ],
       ),
@@ -66,7 +101,7 @@ class HomeScreen extends StatelessWidget {
   // 메인 액션 카드 (3초 진단하기)
   Widget _buildMainActionCard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
       child: InkWell(
         onTap: () {
           if (onNavigateToDiagnosis != null) {
@@ -176,11 +211,7 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.shield,
-                  size: 50,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.shield, size: 50, color: Colors.white),
               ),
             ],
           ),
@@ -191,75 +222,11 @@ class HomeScreen extends StatelessWidget {
 
   // 전문가 법률 칼럼 리스트
   Widget _buildLegalColumnList(BuildContext context) {
-    final columns = [
-      {
-        'title': "특약사항에 '이 문구' 없으면 보증금 날립니다",
-        'author': '박성훈 변호사',
-        'date': '2026.01.20',
-        'icon': Icons.gavel,
-        'content': '''전세 계약 시 특약사항에 반드시 기재해야 할 핵심 문구를 알려드립니다.
-
-1. "본 계약의 잔금은 확정일자를 받은 후 지급한다"
-→ 이 문구가 없으면 잔금을 먼저 주고 확정일자를 못 받는 경우가 발생할 수 있습니다.
-
-2. "임대인은 보증금 반환 시까지 근저당권 설정을 금지한다"
-→ 계약 후 추가로 근저당을 설정하여 전세금이 위험해지는 것을 방지합니다.
-
-3. "임대인의 체납 세금이 있을 시 계약을 해지할 수 있다"
-→ 나중에 발견되는 체납으로 인한 피해를 예방할 수 있습니다.
-
-이 세 가지 문구는 변호사로서 강력히 권장하는 필수 특약사항입니다.
-계약서에 반드시 기재하시고, 임대인과 중개업소의 날인을 받으세요.''',
-      },
-      {
-        'title': 'HUG 보증보험, 거절되는 집의 3가지 특징',
-        'author': '최지수 법무사',
-        'date': '2026.01.18',
-        'icon': Icons.shield_outlined,
-        'content': '''HUG(주택도시보증공사) 전세보증보험 가입이 거절되는 경우가 있습니다.
-
-1. 전세가율이 매우 높은 경우 (매매가 대비 80% 이상)
-→ 깡통전세 위험이 높아 보험사에서 가입을 거부합니다.
-
-2. 근저당권 설정액이 과도한 경우
-→ 선순위 채권이 많으면 보증금 회수가 어려워 거절됩니다.
-
-3. 임대인이 세금 체납 중인 경우
-→ 국세, 지방세 체납 이력이 있으면 위험 신호입니다.
-
-보증보험 가입이 거절된 집은 위험 신호이므로, 계약을 재고하시는 것이 안전합니다.
-보증지킴이 앱으로 사전에 진단받으시면 이런 위험을 미리 확인하실 수 있습니다.''',
-      },
-      {
-        'title': "등기부등본 '을구'에서 꼭 봐야 할 권리 관계",
-        'author': '김건희 대표',
-        'date': '2026.01.15',
-        'icon': Icons.description_outlined,
-        'content': '''등기부등본의 '을구'는 소유권 이외의 권리 관계를 보여줍니다.
-
-확인해야 할 핵심 항목:
-
-1. 근저당권 설정액
-→ 전세보증금보다 근저당이 크면 위험합니다.
-
-2. 선순위 채권 여부
-→ 먼저 설정된 전세권이나 임차권이 있는지 확인하세요.
-
-3. 가압류, 가등기 등 제한물권
-→ 이런 권리가 있으면 경매로 갈 가능성이 높습니다.
-
-등기부등본은 반드시 계약 당일 발급본을 받아서 확인하시고,
-의심스러운 내용이 있다면 반드시 전문가와 상담하세요.
-
-Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드립니다.''',
-      },
-    ];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -293,39 +260,30 @@ Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드�
           ),
         ),
         const SizedBox(height: 16),
-        ...columns.map((column) => _buildColumnCard(
-              context,
-              title: column['title'] as String,
-              author: column['author'] as String,
-              date: column['date'] as String,
-              icon: column['icon'] as IconData,
-              content: column['content'] as String,
-            )),
+        ...ColumnRepository.columns.map(
+          (column) => _buildColumnCard(context, column: column),
+        ),
       ],
     );
   }
 
   // 전문가 칼럼 카드
-  Widget _buildColumnCard(
-    BuildContext context, {
-    required String title,
-    required String author,
-    required String date,
-    required IconData icon,
-    required String content,
-  }) {
+  Widget _buildColumnCard(BuildContext context, {required ColumnData column}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _horizontalPadding,
+        vertical: 6,
+      ),
       child: InkWell(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ColumnDetailScreen(
-                title: title,
-                author: author,
-                date: date,
-                content: content,
+                title: column.title,
+                author: column.author,
+                date: column.date,
+                content: column.content,
               ),
             ),
           );
@@ -335,14 +293,8 @@ Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드�
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.06),
-                blurRadius: 12,
-                offset: const Offset(0, 3),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(_cardBorderRadius),
+            boxShadow: _cardShadow,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,11 +314,7 @@ Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드�
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  size: 28,
-                  color: AppColors.primary,
-                ),
+                child: Icon(column.icon, size: 28, color: AppColors.primary),
               ),
               const SizedBox(width: 16),
 
@@ -377,7 +325,7 @@ Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드�
                   children: [
                     // 제목
                     Text(
-                      title,
+                      column.title,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -402,7 +350,7 @@ Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드�
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            author,
+                            column.author,
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -412,7 +360,7 @@ Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드�
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          date,
+                          column.date,
                           style: TextStyle(
                             fontSize: 11,
                             color: Colors.grey[500],
@@ -425,11 +373,410 @@ Safe-Guard 엔진은 이런 복잡한 권리 관계를 3초 만에 분석해드�
               ),
 
               // 화살표
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: Colors.grey[400],
+              Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 체크리스트 요약 카드
+  Widget _buildChecklistSummary(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChecklistScreen()),
+          );
+        },
+        borderRadius: BorderRadius.circular(_cardBorderRadius),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.accent.withValues(alpha: 0.1), Colors.white],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(_cardBorderRadius),
+            border: Border.all(
+              color: AppColors.accent.withValues(alpha: 0.3),
+              width: 2,
+            ),
+            boxShadow: _cardShadow,
+          ),
+          child: Row(
+            children: [
+              // 아이콘
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: AppColors.accent.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.checklist_rtl,
+                  size: 30,
+                  color: AppColors.accent,
+                ),
               ),
+              const SizedBox(width: 16),
+
+              // 텍스트
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '계약 준비는 잘 되고 있나요?',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textDark,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      '필수 체크리스트를 확인해보세요',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textLight,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // 진행률
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: LinearProgressIndicator(
+                              value: 0.3,
+                              minHeight: 6,
+                              backgroundColor: Colors.grey[200],
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                AppColors.accent,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          '3/8',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.accent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // 화살표
+              Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 부동산 뉴스 티커
+  Widget _buildNewsTicker(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewsScreen()),
+          );
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFF3E0), // Amber 계열 연한 배경
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: const Color(0xFFFFB74D).withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFF9800),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.campaign,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '부동산 뉴스',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange[900],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '전세 사기 예방 꿀팁: 특약사항 편',
+                      style: TextStyle(fontSize: 14, color: Colors.grey[800]),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey[600]),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Firestore 연동 전세 안전 꿀팁 섹션
+  Widget _buildFirestoreTipsSection(BuildContext context) {
+    final firestoreService = FirestoreService();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '전세 안전 꿀팁',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF00C853).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.cloud_outlined,
+                      size: 12,
+                      color: Color(0xFF00C853),
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      '실시간',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00C853),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // StreamBuilder로 실시간 데이터 가져오기
+        StreamBuilder<List<Tip>>(
+          stream: firestoreService.getTipsStream(),
+          builder: (context, snapshot) {
+            // 로딩 중
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(40),
+                  child: CircularProgressIndicator(color: AppColors.accent),
+                ),
+              );
+            }
+
+            // 에러 발생
+            if (snapshot.hasError) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: _horizontalPadding,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.error_outline, color: Colors.red),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          '데이터를 불러올 수 없습니다: ${snapshot.error}',
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            // 데이터가 없을 때
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: _horizontalPadding,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.grey),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          '아직 등록된 꿀팁이 없습니다.',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            // 데이터 렌더링
+            final tips = snapshot.data!;
+            return Column(
+              children: tips.map((tip) => _buildTipCard(context, tip)).toList(),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  // 꿀팁 카드 (Firestore 데이터용)
+  Widget _buildTipCard(BuildContext context, Tip tip) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: _horizontalPadding,
+        vertical: 6,
+      ),
+      child: InkWell(
+        onTap: () {
+          // 상세 화면으로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ColumnDetailScreen(
+                title: tip.title,
+                author: '보증지킴이',
+                date: '2026.01.26',
+                content: tip.content,
+                appBarTitle: '전세 안전 꿀팁',
+                documentId: tip.id,
+                initialLikeCount: tip.likeCount,
+                initialDislikeCount: tip.dislikeCount,
+              ),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(_cardBorderRadius),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(_cardBorderRadius),
+            border: Border.all(
+              color: const Color(0xFF00C853).withValues(alpha: 0.3),
+              width: 1.5,
+            ),
+            boxShadow: _cardShadow,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 아이콘
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF00C853).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.lightbulb_outline,
+                  size: 24,
+                  color: Color(0xFF00C853),
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // 텍스트 영역
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 제목
+                    Text(
+                      tip.title,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textDark,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+
+                    // 미리보기 (첫 줄만)
+                    Text(
+                      tip.content.split('\n').first,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textLight,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+
+              // 화살표
+              Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
             ],
           ),
         ),

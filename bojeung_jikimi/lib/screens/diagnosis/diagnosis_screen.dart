@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kpostal/kpostal.dart';
+import '../../utils/safety_calculator.dart';
 import '../report/report_result_screen.dart';
 
 // 진단하기 화면 (7단계 진단 프로세스)
@@ -20,6 +21,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
   String _situation = ''; // Step 2: 현재 상황 (계약 예정/거주 중/계약 만료 전)
   String _deposit = ''; // Step 3: 보증금 (숫자 문자열, 만원 단위)
   String _monthlyRent = ''; // Step 3: 월세 (숫자 문자열, 만원 단위)
+  String _marketPrice = ''; // Step 3: 매매가/시세 (숫자 문자열, 만원 단위)
+  String _priorCredit = ''; // Step 3: 선순위 채권(근저당) (숫자 문자열, 만원 단위)
   String _period = ''; // Step 4: 계약 기간 (1년/2년/기타)
   String _address = ''; // Step 5: 주소 (도로명 주소)
   String _detailAddress = ''; // Step 5: 상세 주소 (동, 호수 등)
@@ -30,6 +33,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
   // TextField 컨트롤러
   final TextEditingController _depositController = TextEditingController();
   final TextEditingController _monthlyController = TextEditingController();
+  final TextEditingController _marketPriceController = TextEditingController();
+  final TextEditingController _priorCreditController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _detailAddressController =
       TextEditingController();
@@ -40,6 +45,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
   // 금액 포맷팅 무한 루프 방지 플래그
   bool _isFormattingDeposit = false;
   bool _isFormattingMonthly = false;
+  bool _isFormattingMarketPrice = false;
+  bool _isFormattingPriorCredit = false;
 
   @override
   void initState() {
@@ -47,6 +54,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
     // 금액 입력 필드에 실시간 포맷팅 리스너 추가
     _depositController.addListener(_onDepositChanged);
     _monthlyController.addListener(_onMonthlyChanged);
+    _marketPriceController.addListener(_onMarketPriceChanged);
+    _priorCreditController.addListener(_onPriorCreditChanged);
     // 연락처 입력 필드에 리스너 추가
     _landlordController.addListener(_onLandlordChanged);
     _nameController.addListener(_onNameChanged);
@@ -58,6 +67,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
     // 컨트롤러 해제 (메모리 누수 방지)
     _depositController.dispose();
     _monthlyController.dispose();
+    _marketPriceController.dispose();
+    _priorCreditController.dispose();
     _addressController.dispose();
     _detailAddressController.dispose();
     _landlordController.dispose();
@@ -120,6 +131,60 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
     }
   }
 
+  // 매매가 입력 실시간 포맷팅 (콤마 자동 추가)
+  void _onMarketPriceChanged() {
+    if (_isFormattingMarketPrice) return; // 재귀 호출 방지
+
+    final text = _marketPriceController.text.replaceAll(',', '');
+    if (text.isEmpty) {
+      setState(() => _marketPrice = '');
+      return;
+    }
+
+    final number = int.tryParse(text);
+    if (number == null) return;
+
+    final formatted = _formatNumber(number);
+    if (formatted != _marketPriceController.text) {
+      _isFormattingMarketPrice = true;
+
+      _marketPriceController.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+
+      setState(() => _marketPrice = number.toString());
+      _isFormattingMarketPrice = false;
+    }
+  }
+
+  // 선순위 채권 입력 실시간 포맷팅 (콤마 자동 추가)
+  void _onPriorCreditChanged() {
+    if (_isFormattingPriorCredit) return;
+
+    final text = _priorCreditController.text.replaceAll(',', '');
+    if (text.isEmpty) {
+      setState(() => _priorCredit = '');
+      return;
+    }
+
+    final number = int.tryParse(text);
+    if (number == null) return;
+
+    final formatted = _formatNumber(number);
+    if (formatted != _priorCreditController.text) {
+      _isFormattingPriorCredit = true;
+
+      _priorCreditController.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+
+      setState(() => _priorCredit = number.toString());
+      _isFormattingPriorCredit = false;
+    }
+  }
+
   // 임대인 이름 입력 실시간 저장
   void _onLandlordChanged() {
     setState(() => _landlordName = _landlordController.text);
@@ -153,6 +218,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
       _situation = '';
       _deposit = '';
       _monthlyRent = '';
+      _marketPrice = '';
+      _priorCredit = '';
       _period = '';
       _address = '';
       _detailAddress = '';
@@ -163,6 +230,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
 
     _depositController.clear();
     _monthlyController.clear();
+    _marketPriceController.clear();
+    _priorCreditController.clear();
     _addressController.clear();
     _detailAddressController.clear();
     _landlordController.clear();
@@ -366,6 +435,60 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
               _buildAmountButton(_monthlyController, 5, '+5만'),
               _buildAmountButton(_monthlyController, 1, '+1만'),
               _buildAmountButton(_monthlyController, 0, '초기화', isReset: true),
+            ],
+          ),
+        ],
+
+        // --- 매매가(시세) 입력 섹션 (전세/반전세/매매일 때만 표시) ---
+        if (_contractType != '월세') ...[
+          const SizedBox(height: 30),
+          const Text(
+            '집 시세 (매매가)',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Color(0xFF1A237E), // Navy
+            ),
+          ),
+          const SizedBox(height: 8),
+          _buildAmountTextField(_marketPriceController, '매매가 입력 (전세가율 계산용)'),
+          const SizedBox(height: 10),
+
+          // 매매가 빠른 입력 버튼
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildAmountButton(_marketPriceController, 10000, '+1억'),
+              _buildAmountButton(_marketPriceController, 5000, '+5000만'),
+              _buildAmountButton(_marketPriceController, 1000, '+1000만'),
+              _buildAmountButton(_marketPriceController, 0, '초기화', isReset: true),
+            ],
+          ),
+
+          // --- 선순위 채권(근저당) 입력 섹션 ---
+          const SizedBox(height: 30),
+          const Text(
+            '선순위 채권 (근저당권)',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Color(0xFF1A237E), // Navy
+            ),
+          ),
+          const SizedBox(height: 8),
+          _buildAmountTextField(_priorCreditController, '근저당 설정액 입력 (없으면 0)'),
+          const SizedBox(height: 10),
+
+          // 선순위 채권 빠른 입력 버튼
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildAmountButton(_priorCreditController, 10000, '+1억'),
+              _buildAmountButton(_priorCreditController, 1000, '+1000만'),
+              _buildAmountButton(_priorCreditController, 100, '+100만'),
+              _buildAmountButton(_priorCreditController, 0, '초기화', isReset: true),
             ],
           ),
         ],
@@ -601,7 +724,7 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
               const SizedBox(height: 12),
               _buildTextField(
                 controller: _landlordController,
-                hint: '계약서상 임대인 이름을 입력해주세요 (HUG 블랙리스트 대조용)',
+                hint: '임대인 이름 (선택사항 - 모르면 비워두셔도 됩니다)',
                 keyboardType: TextInputType.text,
               ),
             ],
@@ -679,6 +802,9 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
       userName: _userName,
       userPhone: _userPhone,
       onComplete: () {
+        // 전세가율 계산
+        final calculatedScore = _calculateSafetyScore();
+
         // 분석 완료 후 결과 화면으로 이동
         Navigator.push(
           context,
@@ -687,9 +813,11 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
               contractType: _contractType,
               deposit: _deposit,
               monthlyRent: _monthlyRent,
+              marketPrice: _marketPrice,
+              priorCredit: _priorCredit,
               address: _address,
               detailAddress: _detailAddress,
-              score: 92,
+              score: calculatedScore,
             ),
           ),
         ).then((_) {
@@ -871,6 +999,16 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
             controller.clear();
             setState(() => _monthlyRent = '');
             _isFormattingMonthly = false;
+          } else if (controller == _marketPriceController) {
+            _isFormattingMarketPrice = true;
+            controller.clear();
+            setState(() => _marketPrice = '');
+            _isFormattingMarketPrice = false;
+          } else if (controller == _priorCreditController) {
+            _isFormattingPriorCredit = true;
+            controller.clear();
+            setState(() => _priorCredit = '');
+            _isFormattingPriorCredit = false;
           }
         } else {
           // 금액 추가 버튼
@@ -889,6 +1027,16 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
             controller.text = formatted;
             setState(() => _monthlyRent = newValue.toString());
             _isFormattingMonthly = false;
+          } else if (controller == _marketPriceController) {
+            _isFormattingMarketPrice = true;
+            controller.text = formatted;
+            setState(() => _marketPrice = newValue.toString());
+            _isFormattingMarketPrice = false;
+          } else if (controller == _priorCreditController) {
+            _isFormattingPriorCredit = true;
+            controller.text = formatted;
+            setState(() => _priorCredit = newValue.toString());
+            _isFormattingPriorCredit = false;
           }
         }
       },
@@ -966,21 +1114,26 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
           if (!isChoiceStep)
             Expanded(
               child: ElevatedButton(
-                onPressed: _currentStep == 5 ? _startAnalysis : _nextStep,
+                onPressed: _canProceedToNext()
+                    ? (_currentStep == 5 ? _startAnalysis : _nextStep)
+                    : null, // 비활성화
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _currentStep == 5
-                      ? const Color(0xFF00C853) // 분석 시작 버튼은 Green
-                      : const Color(0xFF1A237E), // 일반 다음 버튼은 Navy
+                  backgroundColor: _canProceedToNext()
+                      ? (_currentStep == 5
+                          ? const Color(0xFF00C853) // 분석 시작 버튼은 Green
+                          : const Color(0xFF1A237E)) // 일반 다음 버튼은 Navy
+                      : Colors.grey[300], // 비활성화 시 회색
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 0,
+                  disabledBackgroundColor: Colors.grey[300],
                 ),
                 child: Text(
                   _getNextButtonText(),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: _canProceedToNext() ? Colors.white : Colors.grey,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -992,6 +1145,20 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
         ],
       ),
     );
+  }
+
+  // 다음 버튼 활성화 여부 체크
+  bool _canProceedToNext() {
+    switch (_currentStep) {
+      case 2: // Step 3: 금액 입력 - 보증금 필수
+        return _deposit.isNotEmpty;
+      case 4: // Step 5: 주소 입력 - 주소 필수
+        return _address.isNotEmpty;
+      case 5: // Step 6: 정보 입력 - 본인 이름과 전화번호만 필수 (임대인 이름은 선택)
+        return _userName.isNotEmpty && _userPhone.isNotEmpty;
+      default:
+        return true; // 나머지 단계는 항상 활성화
+    }
   }
 
   // 다음 버튼 텍스트 반환
@@ -1057,6 +1224,24 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
         _addressController.text = _address;
       });
     }
+  }
+
+  // 안전도 점수 계산 (SafetyCalculator 유틸리티 사용)
+  int _calculateSafetyScore() {
+    // 입력값 파싱
+    final depositValue = double.tryParse(_deposit.replaceAll(',', '')) ?? 0;
+    final marketValue = double.tryParse(_marketPrice.replaceAll(',', '')) ?? 0;
+    final priorCreditValue = double.tryParse(_priorCredit.replaceAll(',', '')) ?? 0;
+
+    // SafetyCalculator로 안전도 계산
+    final result = SafetyCalculator.calculate(
+      deposit: depositValue,
+      marketPrice: marketValue,
+      priorCredit: priorCreditValue,
+    );
+
+    // 계산된 결과를 점수로 변환
+    return SafetyCalculator.calculateScore(result);
   }
 
   // 숫자 포맷팅 함수 (천 단위 콤마 추가)
@@ -1376,7 +1561,7 @@ class _SGSEAnalysisScreenState extends State<_SGSEAnalysisScreen>
                       '임대인 이름',
                       widget.landlordName.isNotEmpty
                           ? widget.landlordName
-                          : '-',
+                          : '정보 없음 (선택 항목)',
                       highlight: true,
                     ),
                     _buildInfoRow(
