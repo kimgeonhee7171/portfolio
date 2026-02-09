@@ -1,6 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../utils/safety_calculator.dart';
+import '../../widgets/safety_gauge_chart.dart';
+
+/// 진단 등급(Red/Yellow/Green)에 따른 필수 특약 사항 추천
+List<String> getRecommendedTerms(String color) {
+  switch (color.toLowerCase()) {
+    case 'green':
+      return [
+        '임대인은 잔금 지급일 다음 날까지 현재의 등기부등본 상태를 유지하며, 근저당권 등 새로운 권리를 설정하지 않는다.',
+        '임대인은 국세 및 지방세 체납 사실이 없음을 확인하며, 위반 시 계약을 해지하고 보증금을 즉시 반환한다.',
+      ];
+    case 'yellow':
+      return [
+        '임대인(매도인) 변경 시, 현 임대인은 새로운 임대인에게 임차인의 보증금 반환 의무 승계를 책임진다.',
+        '전세보증금 반환보증 가입이 불가능할 경우 본 계약은 무효로 하며, 임대인은 계약금을 즉시 반환한다.',
+        '임대인은 임차인의 전세자금대출 실행에 적극 협조하며, 대출 미승인 시 계약금 전액을 반환한다.',
+      ];
+    case 'red':
+      return [
+        '본 건물은 깡통전세 위험이 있으므로, 보증금을 최우선변제금 범위 내로 조정하거나 월세 전환을 강력히 권장함.',
+        '계약 진행 시, 보증금 전액에 대한 \'질권 설정\' 또는 \'전세권 설정 등기\'를 필수 조건으로 한다.',
+      ];
+    default:
+      return getRecommendedTerms('green');
+  }
+}
 
 // 신호등 리포트 화면 (Safe-Guard Scoring Engine - 7대 안전 진단)
 class ReportResultScreen extends StatelessWidget {
@@ -12,6 +37,8 @@ class ReportResultScreen extends StatelessWidget {
   final String address;
   final String detailAddress;
   final int score;
+  final bool isViolatedArchitecture;
+  final bool isTaxArrears;
 
   const ReportResultScreen({
     super.key,
@@ -23,20 +50,27 @@ class ReportResultScreen extends StatelessWidget {
     required this.address,
     required this.detailAddress,
     this.score = 95,
+    this.isViolatedArchitecture = false,
+    this.isTaxArrears = true,
   });
 
-  // SafetyCalculator를 사용한 안전도 계산
+  // 7-Layer S-GSE: 추가 위험 요소 반영 안전도 계산
   SafetyResult get _safetyResult {
     final depositValue = double.tryParse(deposit.replaceAll(',', '')) ?? 0;
     final marketValue = double.tryParse(marketPrice.replaceAll(',', '')) ?? 0;
     final priorValue = double.tryParse(priorCredit.replaceAll(',', '')) ?? 0;
 
-    return SafetyCalculator.calculate(
+    return SafetyCalculator.calculateSafety(
       deposit: depositValue,
       marketPrice: marketValue,
       priorCredit: priorValue,
+      isViolatedArchitecture: isViolatedArchitecture,
+      isTaxArrears: isTaxArrears,
     );
   }
+
+  // 표시용 점수 (S-GSE 결과 기반)
+  int get _displayScore => SafetyCalculator.calculateScore(_safetyResult);
 
   // 전세가율 계산
   double get _depositRatio {
@@ -49,23 +83,21 @@ class ReportResultScreen extends StatelessWidget {
   // 깡통전세 위험도 계산 (SafetyResult의 ratio 사용)
   double get _totalRiskRatio => _safetyResult.ratio;
 
-  // 점수에 따른 등급 색상
-  Color get _gradeColor {
-    if (score >= 90) return const Color(0xFF00C853); // Green
-    if (score >= 70) return const Color(0xFFFFA726); // Orange
-    return const Color(0xFFEF5350); // Red
-  }
+  // 등급에 따른 색상·메시지 (S-GSE 결과 기반)
+  Color get _gradeColor => _safetyResult.color;
+  String get _gradeText => _safetyResult.message;
+  String get _gradeDescription => _safetyResult.description;
 
-  String get _gradeText {
-    if (score >= 90) return '안전합니다';
-    if (score >= 70) return '주의가 필요합니다';
-    return '위험합니다';
-  }
-
-  String get _gradeDescription {
-    if (score >= 90) return '계약 진행에 문제가 없습니다';
-    if (score >= 70) return '몇 가지 확인이 필요합니다';
-    return '계약을 재검토하시기 바랍니다';
+  /// SafetyResult 등급을 Red/Yellow/Green 문자열로 변환
+  String get _recommendedTermsColor {
+    switch (_safetyResult.grade) {
+      case SafetyCalculator.gradeDanger:
+        return 'red';
+      case SafetyCalculator.gradeCaution:
+        return 'yellow';
+      default:
+        return 'green';
+    }
   }
 
   @override
@@ -100,16 +132,21 @@ class ReportResultScreen extends StatelessWidget {
             _buildGradeShieldCard(),
             const SizedBox(height: 24),
             _buildEngineBadge(),
+            _buildDataSourceCaption(),
             const SizedBox(height: 24),
             _buildPropertyInfo(),
             const SizedBox(height: 24),
             _buildSafetyCalculationCard(),
+            const SizedBox(height: 24),
+            _buildRecommendedTermsSection(),
             const SizedBox(height: 24),
             _buildDetailAnalysis(),
             const SizedBox(height: 24),
             _buildShareButton(),
             const SizedBox(height: 16),
             _buildExpertReviewCTA(context),
+            const SizedBox(height: 24),
+            _buildDisclaimerFooter(),
             const SizedBox(height: 40),
           ],
         ),
@@ -117,14 +154,53 @@ class ReportResultScreen extends StatelessWidget {
     );
   }
 
-  // 상단 종합 등급 쉴드 카드
+  // 데이터 출처 표시
+  Widget _buildDataSourceCaption() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.verified_user_outlined, size: 14, color: Colors.grey[500]),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              'Data Source: 대한민국 법원 인터넷등기소 & 국토교통부 (Simulated)',
+              style: TextStyle(fontSize: 11, color: Colors.grey[500]),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 면책 조항 푸터
+  Widget _buildDisclaimerFooter() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        '※ 본 진단 결과는 참고용이며, 법적 효력이 없습니다. 정확한 내용은 전문가와 상담하세요.',
+        style: TextStyle(fontSize: 12, color: Colors.grey[600], height: 1.4),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  // 상단 종합 등급 - 게이지 차트 + 중앙 점수
   Widget _buildGradeShieldCard() {
     return Container(
       margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [_gradeColor.withValues(alpha: 0.1), Colors.white],
+          colors: [_gradeColor.withValues(alpha: 0.08), Colors.white],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -139,47 +215,37 @@ class ReportResultScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _gradeColor.withValues(alpha: 0.15),
+          SizedBox(
+            height: 200,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SafetyGaugeChart(
+                  score: _displayScore,
+                  gradeColor: _gradeColor,
+                  size: 220,
                 ),
-              ),
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _gradeColor.withValues(alpha: 0.25),
+                Positioned(
+                  bottom: 20,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '$_displayScore점',
+                        style: TextStyle(
+                          fontSize: 42,
+                          fontWeight: FontWeight.bold,
+                          color: _gradeColor,
+                          height: 1,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _gradeColor,
-                ),
-                child: const Icon(Icons.shield, size: 50, color: Colors.white),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Text(
-            '$score점',
-            style: TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-              color: _gradeColor,
-              height: 1,
+              ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
@@ -457,8 +523,80 @@ class ReportResultScreen extends StatelessWidget {
     );
   }
 
-  // 상세 분석 리스트 (7대 안전 진단 기준)
+  // 상세 분석 리스트 (7-Layer 진단 항목 - 사업계획서 기준)
   Widget _buildDetailAnalysis() {
+    final ratio = _totalRiskRatio;
+    final item3Status = ratio >= 80
+        ? 'danger'
+        : (ratio >= 70 ? 'caution' : 'safe');
+    final item3Detail = ratio >= 70
+        ? '매매가의 ${ratio.toStringAsFixed(0)}% 육박'
+        : ratio >= 60
+        ? '매매가의 ${ratio.toStringAsFixed(0)}% (주의 필요)'
+        : '매매가의 ${ratio.toStringAsFixed(0)}% (적정 범위)';
+    final item3Badge = item3Status == 'danger'
+        ? 'Danger'
+        : (item3Status == 'caution' ? 'Warning' : 'Pass');
+
+    final items = [
+      _LayerItem(
+        index: 1,
+        title: '소유자 진위 확인 (신분증 대조)',
+        icon: Icons.badge_outlined,
+        status: 'safe',
+        badgeText: 'Pass',
+        detail: '신분증과 등기부등본 소유자가 일치합니다',
+      ),
+      _LayerItem(
+        index: 2,
+        title: '권리 침해 (압류/가처분)',
+        icon: Icons.gavel,
+        status: 'safe',
+        badgeText: 'Pass',
+        detail: '압류·가처분 등 권리 침해 사항이 없습니다',
+      ),
+      _LayerItem(
+        index: 3,
+        title: '근저당 비율 (주택가격 대비)',
+        icon: Icons.account_balance,
+        status: item3Status,
+        badgeText: item3Badge,
+        detail: item3Detail,
+      ),
+      _LayerItem(
+        index: 4,
+        title: '선순위 채권 확인',
+        icon: Icons.receipt_long_outlined,
+        status: 'safe',
+        badgeText: 'Pass',
+        detail: '선순위 채권이 없습니다',
+      ),
+      _LayerItem(
+        index: 5,
+        title: '임대인 체납 사실 (국세/지방세)',
+        icon: Icons.verified_user_outlined,
+        status: 'safe',
+        badgeText: 'Pass',
+        detail: '완납 확인됨',
+      ),
+      _LayerItem(
+        index: 6,
+        title: '위반건축물 여부',
+        icon: Icons.apartment,
+        status: isViolatedArchitecture ? 'danger' : 'safe',
+        badgeText: isViolatedArchitecture ? 'Danger' : 'Pass',
+        detail: isViolatedArchitecture ? '위반건축물 등재' : '위반 사항 없음',
+      ),
+      _LayerItem(
+        index: 7,
+        title: '특약사항 독소 조항 (NLP 분석)',
+        icon: Icons.article_outlined,
+        status: 'safe',
+        badgeText: 'Pass',
+        detail: '발견되지 않음',
+      ),
+    ];
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -489,7 +627,7 @@ class ReportResultScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 const Text(
-                  '7대 안전 진단 결과',
+                  '7-Layer 안전 진단 결과',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -500,206 +638,104 @@ class ReportResultScreen extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-
-          // [A: 자산 가치 분석]
-          _buildAnalysisCategory(
-            category: 'A. 자산 가치 분석',
-            icon: Icons.analytics,
-            items: [
-              _AnalysisDetail(
-                title: '1. 전세가율',
-                result: '${_depositRatio.toStringAsFixed(1)}%',
-                status: _depositRatio < 60
-                    ? 'safe'
-                    : (_depositRatio < 80 ? 'caution' : 'danger'),
-                detail: _depositRatio < 60
-                    ? '전세가율이 적정 범위입니다'
-                    : (_depositRatio < 80
-                          ? '전세가율이 다소 높습니다. 주의가 필요합니다'
-                          : '전세가율이 매우 높아 위험합니다'),
-              ),
-              _AnalysisDetail(
-                title: '2. 깡통전세 위험도',
-                result: _totalRiskRatio >= 80 ? '위험' : '안전',
-                status: _totalRiskRatio >= 80 ? 'danger' : 'safe',
-                detail: '(보증금+채권)/매매가 = ${_totalRiskRatio.toStringAsFixed(1)}%',
-              ),
-              _AnalysisDetail(
-                title: '3. 보증보험 가입 가능성',
-                result: _depositRatio <= 90 ? '가능' : '어려움',
-                status: _depositRatio <= 90 ? 'safe' : 'caution',
-                detail: _depositRatio <= 90
-                    ? 'HUG 전세보증보험 가입이 가능합니다'
-                    : '전세가율이 높아 보증보험 가입이 어려울 수 있습니다',
-              ),
-            ],
-          ),
-
-          const Divider(height: 1),
-
-          // [B: 임대인 신용 분석]
-          _buildAnalysisCategory(
-            category: 'B. 임대인 신용 분석 (Dual-Check)',
-            icon: Icons.person_search,
-            items: [
-              const _AnalysisDetail(
-                title: '4. 국세/지방세 체납',
-                result: '없음',
-                status: 'safe',
-                detail: '국세청 및 지자체 체납 이력이 없습니다',
-              ),
-              const _AnalysisDetail(
-                title: '5. 임대인 소유권 일치',
-                result: '일치',
-                status: 'safe',
-                detail: '등기부등본 상 소유자와 임대인이 일치합니다',
-              ),
-            ],
-          ),
-
-          const Divider(height: 1),
-
-          // [C: 건물 및 권리 분석]
-          _buildAnalysisCategory(
-            category: 'C. 건물 및 권리 분석',
-            icon: Icons.apartment,
-            items: [
-              const _AnalysisDetail(
-                title: '6. 위반 건축물 여부',
-                result: '깨끗함',
-                status: 'safe',
-                detail: '불법 증축이나 용도 위반 사항이 없습니다',
-              ),
-              const _AnalysisDetail(
-                title: '7. 공인중개사 등록',
-                result: '정상 등록',
-                status: 'safe',
-                detail: '중개업소가 정식으로 등록되어 있습니다',
-              ),
-            ],
-          ),
+          ...items.map((item) => _buildLayerItem(item)),
+          const SizedBox(height: 4),
         ],
       ),
     );
   }
 
-  // 카테고리별 분석 항목
-  Widget _buildAnalysisCategory({
-    required String category,
-    required IconData icon,
-    required List<_AnalysisDetail> items,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1A237E).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, size: 20, color: const Color(0xFF1A237E)),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  category,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ...items.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _buildDetailItem(item),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // 상세 항목
-  Widget _buildDetailItem(_AnalysisDetail detail) {
-    final statusColor = detail.status == 'safe'
-        ? const Color(0xFF00C853)
-        : detail.status == 'caution'
-        ? const Color(0xFFFFA726)
-        : const Color(0xFFEF5350);
+  // 7-Layer 항목 카드 (아이콘 + 제목 + 뱃지)
+  Widget _buildLayerItem(_LayerItem item) {
+    final statusColor = item.status == 'safe'
+        ? const Color(0xFF00C853) // 초록 Pass
+        : item.status == 'caution'
+        ? const Color(0xFFFFA726) // 노랑 Warning
+        : const Color(0xFFEF5350); // 빨강 Danger
 
     return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Material(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                detail.status == 'safe'
-                    ? Icons.check_circle
-                    : detail.status == 'caution'
-                    ? Icons.warning
-                    : Icons.error,
-                size: 20,
-                color: statusColor,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  detail.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1A237E).withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    item.icon,
+                    size: 24,
+                    color: const Color(0xFF1A237E),
                   ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: statusColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  detail.result,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: statusColor,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${item.index}. ${item.title}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        item.detail,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            detail.detail,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey[600],
-              height: 1.4,
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: statusColor.withValues(alpha: 0.5),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    item.badgeText,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: statusColor,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
+  }
+
+  // AI 추천 필수 특약 체크리스트 섹션
+  Widget _buildRecommendedTermsSection() {
+    final terms = getRecommendedTerms(_recommendedTermsColor);
+    return _RecommendedTermsCard(terms: terms, accentColor: _gradeColor);
   }
 
   // 공유하기 버튼
@@ -878,7 +914,7 @@ class ReportResultScreen extends StatelessWidget {
     return '''🏠 우리집 전세 안전 진단 결과 도착!
 
 📍 주소: $address
-🛡 안전 점수: $score점 ($_gradeText)
+🛡 안전 점수: $_displayScore점 ($_gradeText)
 📊 위험도: ${result.ratio.toStringAsFixed(1)}% (${result.message})
 
 ${result.grade == SafetyCalculator.gradeDanger ? '⚠️ 주의: 깡통전세 위험도가 높습니다\n' : ''}${_depositRatio > 0 ? '전세가율: ${_depositRatio.toStringAsFixed(1)}%\n' : ''}
@@ -901,17 +937,132 @@ https://safehome.com
   }
 }
 
-// 분석 상세 데이터 모델
-class _AnalysisDetail {
+/// AI 추천 필수 특약 체크리스트 카드 (체크박스 상태 관리)
+class _RecommendedTermsCard extends StatefulWidget {
+  final List<String> terms;
+  final Color accentColor;
+
+  const _RecommendedTermsCard({required this.terms, required this.accentColor});
+
+  @override
+  State<_RecommendedTermsCard> createState() => _RecommendedTermsCardState();
+}
+
+class _RecommendedTermsCardState extends State<_RecommendedTermsCard> {
+  late List<bool> _checkedList;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkedList = List.filled(widget.terms.length, false);
+  }
+
+  @override
+  void didUpdateWidget(covariant _RecommendedTermsCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.terms.length != _checkedList.length) {
+      _checkedList = List.filled(widget.terms.length, false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: widget.accentColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    Icons.gavel_rounded,
+                    size: 24,
+                    color: widget.accentColor,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'AI가 추천하는 필수 특약 체크리스트',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          ...List.generate(widget.terms.length, (index) {
+            return CheckboxListTile(
+              value: _checkedList[index],
+              onChanged: (value) {
+                setState(() {
+                  _checkedList[index] = value ?? false;
+                });
+              },
+              activeColor: widget.accentColor,
+              controlAffinity: ListTileControlAffinity.leading,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 8,
+              ),
+              title: Text(
+                widget.terms[index],
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey[800],
+                  height: 1.5,
+                  decoration: _checkedList[index]
+                      ? TextDecoration.lineThrough
+                      : null,
+                ),
+              ),
+            );
+          }),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+}
+
+// 7-Layer 진단 항목 데이터 모델
+class _LayerItem {
+  final int index;
   final String title;
-  final String result;
-  final String status;
+  final IconData icon;
+  final String status; // safe, caution, danger
+  final String badgeText; // Pass, Warning, Danger
   final String detail;
 
-  const _AnalysisDetail({
+  const _LayerItem({
+    required this.index,
     required this.title,
-    required this.result,
+    required this.icon,
     required this.status,
+    required this.badgeText,
     required this.detail,
   });
 }

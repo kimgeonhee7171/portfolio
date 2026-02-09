@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kpostal/kpostal.dart';
@@ -29,6 +30,14 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
   String _landlordName = ''; // Step 6: 임대인(집주인) 이름 (블랙리스트 대조용)
   String _userName = ''; // Step 6: 이름
   String _userPhone = ''; // Step 6: 전화번호 (010-0000-0000)
+
+  // Step 2. 추가 위험 요소 (7-Layer S-GSE)
+  bool _isViolatedArchitecture = false; // 위반건축물 표기 여부
+  bool _isTaxArrears = true; // 국세/지방세 완납 확인 여부 (미납 없음 = true)
+
+  // 등기부등본 OCR (향후 AI 연동)
+  bool _ocrCompleted = false; // OCR 분석 완료 여부
+  bool _isOcrLoading = false; // OCR 분석 중 여부
 
   // TextField 컨트롤러
   final TextEditingController _depositController = TextEditingController();
@@ -226,6 +235,9 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
       _landlordName = '';
       _userName = '';
       _userPhone = '';
+      _isViolatedArchitecture = false;
+      _isTaxArrears = true;
+      _ocrCompleted = false;
     });
 
     _depositController.clear();
@@ -439,61 +451,264 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
           ),
         ],
 
-        // --- 매매가(시세) 입력 섹션 (전세/반전세/매매일 때만 표시) ---
+        // --- 등기부등본 업로드 (전세/반전세/매매일 때만 표시) ---
         if (_contractType != '월세') ...[
           const SizedBox(height: 30),
           const Text(
-            '집 시세 (매매가)',
+            '집 시세 & 선순위 채권 확인',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Color(0xFF1A237E), // Navy
+              color: Color(0xFF1A237E),
             ),
           ),
           const SizedBox(height: 8),
-          _buildAmountTextField(_marketPriceController, '매매가 입력 (전세가율 계산용)'),
-          const SizedBox(height: 10),
-
-          // 매매가 빠른 입력 버튼
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _buildAmountButton(_marketPriceController, 10000, '+1억'),
-              _buildAmountButton(_marketPriceController, 5000, '+5000만'),
-              _buildAmountButton(_marketPriceController, 1000, '+1000만'),
-              _buildAmountButton(_marketPriceController, 0, '초기화', isReset: true),
-            ],
+          Text(
+            '등기부등본을 업로드하면 AI가 매매가·근저당 정보를 자동 추출합니다.',
+            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
           ),
-
-          // --- 선순위 채권(근저당) 입력 섹션 ---
-          const SizedBox(height: 30),
-          const Text(
-            '선순위 채권 (근저당권)',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Color(0xFF1A237E), // Navy
-            ),
-          ),
-          const SizedBox(height: 8),
-          _buildAmountTextField(_priorCreditController, '근저당 설정액 입력 (없으면 0)'),
-          const SizedBox(height: 10),
-
-          // 선순위 채권 빠른 입력 버튼
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _buildAmountButton(_priorCreditController, 10000, '+1억'),
-              _buildAmountButton(_priorCreditController, 1000, '+1000만'),
-              _buildAmountButton(_priorCreditController, 100, '+100만'),
-              _buildAmountButton(_priorCreditController, 0, '초기화', isReset: true),
-            ],
-          ),
+          const SizedBox(height: 16),
+          _buildRegistryUploadCard(),
+          if (_ocrCompleted) _buildOcrResultCard(),
         ],
+
+        // --- Step 2. 추가 위험 요소 확인 ---
+        const SizedBox(height: 32),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey[50],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[200]!),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Step 2. 추가 위험 요소 확인',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Color(0xFF1A237E),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '건축물·세금 정보를 확인하면 더 정확한 진단이 가능합니다.',
+                style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 16),
+              SwitchListTile(
+                value: _isViolatedArchitecture,
+                onChanged: (value) {
+                  setState(() => _isViolatedArchitecture = value);
+                },
+                title: const Text(
+                  '건축물대장에 \'위반건축물\' 표기가 있나요?',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color: Colors.black87,
+                  ),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(
+                    '위반건축물은 전세자금대출·보증보험 가입이 불가할 수 있습니다.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                      height: 1.3,
+                    ),
+                  ),
+                ),
+                activeTrackColor: const Color(0xFF00C853),
+                contentPadding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              const Divider(height: 24),
+              SwitchListTile(
+                value: _isTaxArrears,
+                onChanged: (value) {
+                  setState(() => _isTaxArrears = value);
+                },
+                title: const Text(
+                  '집주인의 국세/지방세 완납 증명서를 확인했나요?',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color: Colors.black87,
+                  ),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(
+                    '미납 세금이 없나요? 조세 채권은 보증금보다 우선 변제될 수 있습니다.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                      height: 1.3,
+                    ),
+                  ),
+                ),
+                activeTrackColor: const Color(0xFF00C853),
+                contentPadding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
+  }
+
+  // 등기부등본 업로드 카드 (점선 테두리)
+  Widget _buildRegistryUploadCard() {
+    return GestureDetector(
+      onTap: _isOcrLoading ? null : () => _simulateOcrExtraction(context),
+      child: DottedBorder(
+        borderType: BorderType.RRect,
+        radius: const Radius.circular(16),
+        dashPattern: const [8, 4],
+        color: const Color(0xFF1A237E).withValues(alpha: 0.4),
+        strokeWidth: 2,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1A237E).withValues(alpha: 0.03),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.description_outlined,
+                size: 64,
+                color: const Color(0xFF1A237E).withValues(alpha: 0.5),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                _ocrCompleted ? '📄 등기부등본' : '📄 등기부등본 파일 업로드/촬영',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A237E),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _ocrCompleted ? '탭하여 다시 스캔' : '여기를 눌러 문서를 스캔하세요',
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // OCR 분석 결과 카드
+  Widget _buildOcrResultCard() {
+    final marketFormatted = _formatNumber(int.tryParse(_marketPrice) ?? 0);
+    final priorFormatted = _formatNumber(int.tryParse(_priorCredit) ?? 0);
+
+    return Container(
+      margin: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF00C853).withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFF00C853).withValues(alpha: 0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.check_circle,
+                color: Color(0xFF00C853),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                '분석 완료',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF00C853),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '매매가: $marketFormatted만원 / 채권: $priorFormatted만원',
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // OCR 시뮬레이션 (1.5초 후 테스트 데이터 할당)
+  Future<void> _simulateOcrExtraction(BuildContext context) async {
+    if (_isOcrLoading) return;
+
+    setState(() => _isOcrLoading = true);
+
+    // 1.5초 동안 "문서 분석 중..." 다이얼로그 표시
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(color: Color(0xFF1A237E)),
+              const SizedBox(height: 24),
+              const Text(
+                '문서 분석 중...',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await Future.delayed(const Duration(milliseconds: 1500));
+
+    if (!context.mounted) return;
+    Navigator.of(context).pop(); // 다이얼로그 닫기
+
+    // 테스트 데이터 할당: 매매가 3억, 근저당 1억 2천만
+    setState(() {
+      _marketPrice = '30000';
+      _priorCredit = '12000';
+      _marketPriceController.text = '30,000';
+      _priorCreditController.text = '12,000';
+      _ocrCompleted = true;
+      _isOcrLoading = false;
+    });
   }
 
   // ========================================
@@ -805,7 +1020,7 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
         // 전세가율 계산
         final calculatedScore = _calculateSafetyScore();
 
-        // 분석 완료 후 결과 화면으로 이동
+        // 분석 완료 후 결과 화면으로 이동 (7-Layer 위험 요소 전달)
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -818,6 +1033,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
               address: _address,
               detailAddress: _detailAddress,
               score: calculatedScore,
+              isViolatedArchitecture: _isViolatedArchitecture,
+              isTaxArrears: _isTaxArrears,
             ),
           ),
         ).then((_) {
@@ -1120,8 +1337,8 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _canProceedToNext()
                       ? (_currentStep == 5
-                          ? const Color(0xFF00C853) // 분석 시작 버튼은 Green
-                          : const Color(0xFF1A237E)) // 일반 다음 버튼은 Navy
+                            ? const Color(0xFF00C853) // 분석 시작 버튼은 Green
+                            : const Color(0xFF1A237E)) // 일반 다음 버튼은 Navy
                       : Colors.grey[300], // 비활성화 시 회색
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -1150,8 +1367,10 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
   // 다음 버튼 활성화 여부 체크
   bool _canProceedToNext() {
     switch (_currentStep) {
-      case 2: // Step 3: 금액 입력 - 보증금 필수
-        return _deposit.isNotEmpty;
+      case 2: // Step 3: 금액 입력 - 보증금 필수, 전세/반전세/매매는 등기부등본 OCR 완료 필수
+        final depositOk = _deposit.isNotEmpty;
+        final ocrOk = _contractType == '월세' || _ocrCompleted;
+        return depositOk && ocrOk;
       case 4: // Step 5: 주소 입력 - 주소 필수
         return _address.isNotEmpty;
       case 5: // Step 6: 정보 입력 - 본인 이름과 전화번호만 필수 (임대인 이름은 선택)
@@ -1228,19 +1447,18 @@ class _DiagnosisScreenState extends State<DiagnosisScreen> {
 
   // 안전도 점수 계산 (SafetyCalculator 유틸리티 사용)
   int _calculateSafetyScore() {
-    // 입력값 파싱
     final depositValue = double.tryParse(_deposit.replaceAll(',', '')) ?? 0;
     final marketValue = double.tryParse(_marketPrice.replaceAll(',', '')) ?? 0;
-    final priorCreditValue = double.tryParse(_priorCredit.replaceAll(',', '')) ?? 0;
+    final priorValue = double.tryParse(_priorCredit.replaceAll(',', '')) ?? 0;
 
-    // SafetyCalculator로 안전도 계산
-    final result = SafetyCalculator.calculate(
+    // 7-Layer S-GSE: 추가 위험 요소 반영
+    final result = SafetyCalculator.calculateSafety(
       deposit: depositValue,
       marketPrice: marketValue,
-      priorCredit: priorCreditValue,
+      priorCredit: priorValue,
+      isViolatedArchitecture: _isViolatedArchitecture,
+      isTaxArrears: _isTaxArrears,
     );
-
-    // 계산된 결과를 점수로 변환
     return SafetyCalculator.calculateScore(result);
   }
 

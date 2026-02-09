@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../report/report_list_screen.dart';
+import '../settings/settings_screen.dart';
 import 'notice_screen.dart';
 import 'faq_screen.dart';
 
@@ -169,11 +170,25 @@ class ProfileScreen extends StatelessWidget {
           const Divider(height: 1, thickness: 1),
           _buildMenuItem(
             context,
+            icon: Icons.shield_outlined,
+            iconColor: AppColors.primary,
+            title: '안심 케어 (자산 보호)',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
+            },
+          ),
+          const Divider(height: 1, thickness: 1),
+          _buildMenuItem(
+            context,
             icon: Icons.settings_outlined,
             iconColor: Colors.grey,
             title: '앱 설정',
             onTap: () {
-              // 앱 설정 화면으로 이동 (추후 구현)
               _showComingSoon(context, '앱 설정');
             },
           ),

@@ -55,6 +55,50 @@ class SafetyCalculator {
     }
   }
 
+  /// 7-Layer S-GSE: 추가 위험 요소 반영 안전도 계산 (우선순위 적용)
+  /// 1순위: 위반건축물 → 무조건 위험
+  /// 2순위: 세금 미확인 → 최소 주의
+  /// 3순위: 기존 깡통전세율 로직
+  static SafetyResult calculateSafety({
+    required double deposit,
+    required double marketPrice,
+    required double priorCredit,
+    required bool isViolatedArchitecture,
+    required bool isTaxArrears,
+  }) {
+    final base = calculate(
+      deposit: deposit,
+      marketPrice: marketPrice,
+      priorCredit: priorCredit,
+    );
+
+    // 1순위: 위반건축물이면 전세가율과 관계없이 무조건 위험
+    if (isViolatedArchitecture) {
+      return SafetyResult(
+        grade: gradeDanger,
+        ratio: base.ratio,
+        color: const Color(0xFFEF5350),
+        message: '위험합니다',
+        description: '위반건축물은 전세자금대출 및 보증보험 가입이 불가능하여 매우 위험합니다.',
+      );
+    }
+
+    // 2순위: 세금 미확인/체납이면 최소 주의
+    if (!isTaxArrears) {
+      if (base.grade == gradeDanger) return base;
+      return SafetyResult(
+        grade: gradeCaution,
+        ratio: base.ratio,
+        color: const Color(0xFFFFA726),
+        message: '주의가 필요합니다',
+        description: '집주인의 세금 체납 여부가 확인되지 않았습니다. 조세 채권은 보증금보다 우선할 수 있습니다.',
+      );
+    }
+
+    // 3순위: 기존 깡통전세율 로직
+    return base;
+  }
+
   // 점수 계산 (100점 만점)
   static int calculateScore(SafetyResult result) {
     if (result.ratio >= 80) {

@@ -40,7 +40,7 @@ class FirestoreService {
   Future<void> addTip(Tip tip) async {
     try {
       await _firestore.collection('tips').add(tip.toMap());
-      debugPrint('✅ Tip 추가 성공: ${tip.title}');
+      debugPrint('Tip 추가 성공: ${tip.title}');
     } catch (e) {
       debugPrint('❌ Tip 추가 에러: $e');
     }
@@ -86,7 +86,7 @@ class FirestoreService {
             fieldName: FieldValue.increment(1),
           });
         }
-        debugPrint('✅ $fieldName 증가 성공: $documentId');
+        debugPrint('$fieldName 증가 성공: $documentId');
       } else {
         // 감소
         final currentCount = data?[fieldName] ?? 0;
@@ -94,7 +94,7 @@ class FirestoreService {
           await docRef.update({
             fieldName: FieldValue.increment(-1),
           });
-          debugPrint('✅ $fieldName 감소 성공: $documentId');
+          debugPrint('$fieldName 감소 성공: $documentId');
         }
       }
     } catch (e) {
